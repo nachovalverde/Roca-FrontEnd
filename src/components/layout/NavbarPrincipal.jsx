@@ -1,4 +1,5 @@
 import { Container, Image, Nav, Navbar } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import logoEscuela from '../../assets/LogoEscuelaRoca2.jpeg'
 
 function NavbarPrincipal() {
@@ -6,7 +7,8 @@ function NavbarPrincipal() {
         <Navbar bg="light" expand="lg">
             <Container>
                 <Navbar.Brand
-                    href="/"
+                    as={Link}
+                    to="/"
                     className="col-auto col-lg-3 d-flex align-items-center gap-2 me-0"
                 >
                     <Image
@@ -40,14 +42,20 @@ function NavbarPrincipal() {
                     <div className="row w-100 align-items-center">
                         <div className="col-12 col-lg-8 d-flex justify-content-center">
                             <Nav>
-                                <Nav.Link href="/">Inicio</Nav.Link>
-                                <Nav.Link href="/institucional">Institucional</Nav.Link>
+                                <Nav.Link as={Link} to="/">
+                                    Inicio
+                                </Nav.Link>
+                                <Nav.Link as={Link} to="/institucional">
+                                    Institucional
+                                </Nav.Link>
                             </Nav>
                         </div>
 
                         <div className="col-12 col-lg-4 d-flex justify-content-center justify-content-lg-end">
                             <Nav>
-                                <Nav.Link href="/login">Ingresar</Nav.Link>
+                                <Nav.Link as={Link} to="/login">
+                                    Ingresar
+                                </Nav.Link>
                             </Nav>
                         </div>
                     </div>

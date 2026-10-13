@@ -1,4 +1,5 @@
-import { Card } from 'react-bootstrap'
+import { Button, Card } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 function NoticiaCard({ noticia }) {
     return (
@@ -10,7 +11,7 @@ function NoticiaCard({ noticia }) {
                 style={{ height: '220px', objectFit: 'cover' }}
             />
 
-            <Card.Body>
+            <Card.Body className="d-flex flex-column">
                 <Card.Subtitle className="mb-2 text-primary">
                     {noticia.categoria}
                 </Card.Subtitle>
@@ -20,6 +21,15 @@ function NoticiaCard({ noticia }) {
                 <Card.Text className="text-secondary">
                     {noticia.descripcion}
                 </Card.Text>
+
+                <Button
+                    as={Link}
+                    to={`/noticias/${noticia.id}`}
+                    variant="primary"
+                    className="mt-auto aling-self-start"
+                >
+                    Leer noticia
+                </Button>
             </Card.Body>
         </Card>
     )
