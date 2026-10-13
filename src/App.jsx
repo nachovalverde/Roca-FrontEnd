@@ -1,13 +1,10 @@
-import { Container } from 'react-bootstrap'
 import Layout from './components/layout/Layout'
+import Home from './pages/Home'
 
 function App() {
   return (
     <Layout>
-      <Container className="py-5">
-        <h1>Portal de la Escuela Roca</h1>
-        <p>Bienvenidos al sitio institucional.</p>
-      </Container>
+      <Home />
     </Layout>
   )
 }
