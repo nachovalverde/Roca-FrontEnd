@@ -2,7 +2,7 @@ import { Card } from 'react-bootstrap'
 
 function NoticiaCard({ noticia }) {
     return (
-        <Card className="h-100 shadow sm">
+        <Card className="h-100 shadow-sm">
             <Card.Img
                 variant="top"
                 src={noticia.imagen}
@@ -17,7 +17,7 @@ function NoticiaCard({ noticia }) {
 
                 <Card.Title>{noticia.titulo}</Card.Title>
 
-                <Card.Text className="text-secundary">
+                <Card.Text className="text-secondary">
                     {noticia.descripcion}
                 </Card.Text>
             </Card.Body>
