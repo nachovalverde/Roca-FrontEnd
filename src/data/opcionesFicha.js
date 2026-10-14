@@ -1,4 +1,4 @@
-export const PASOS = ['Alumno', 'Padre', 'Madre', 'Vivienda', 'Contactos']
+export const PASOS = ['Alumno', 'Padre', 'Madre', 'Vivienda', 'Contactos', 'Revisión']
 
 export const GRADOS = ['Jardín', '1°', '2°', '3°', '4°', '5°', '6°']
 export const SI_NO = ['Sí', 'No']
@@ -11,3 +11,4 @@ export const PLAN_SOCIAL = ['No', 'Asignación Universal', 'Otro plan social']
 
 export const TENENCIAS = ['Propia', 'Alquilada', 'Otros']
 export const TIPOS_VIVIENDA = ['Material', 'Prefabricada', 'Otros']
+

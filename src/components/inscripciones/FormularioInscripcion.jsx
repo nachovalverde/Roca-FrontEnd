@@ -8,6 +8,7 @@ import ContactoEmergenciaForm from './ContactoEmergenciaForm'
 import { PASOS } from '../../data/opcionesFicha'
 import { inscripcionVacia } from '../../data/inscripcionVacia'
 import { validarPaso, hayErrores } from '../../utils/validarInscripcion'
+import ResumenInscripcion from './ResumenInscripcion'
 
 function FormularioInscripcion({ inscripcionInicial = inscripcionVacia, onGuardar }) {
   const [datos, setDatos] = useState(inscripcionInicial)
@@ -125,6 +126,15 @@ function FormularioInscripcion({ inscripcionInicial = inscripcionVacia, onGuarda
                   onChange={(campo, valor) => actualizarContacto(indice, campo, valor)}
                 />
               ))}
+            </>
+          )}
+
+          {pasoActual === 5 && (
+            <>
+              <p className="mb-4">
+                Revisá los datos antes de guardar. Si algo está mal, tocá Editar en esa sección.
+              </p>
+              <ResumenInscripcion datos={datos} onEditarPaso={irAPaso} />
             </>
           )}
 
