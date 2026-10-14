@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Layout from '../components/layout/Layout'
 import Home from '../pages/Home'
 import NoticiasDetalle from '../pages/NoticiasDetalle'
+import Institucional from '../pages/Institucional'
 
 function NotFound() {
     return (
@@ -20,6 +21,7 @@ function AppRouter() {
                     <Route path="/" element={<Home />} />
                     <Route path="/noticias/:id" element={<NoticiasDetalle />} />
                     <Route path="*" element={<NotFound />} />
+                    <Route path="/institucional" element={<Institucional />} />
                 </Routes>
             </Layout>
         </BrowserRouter>
