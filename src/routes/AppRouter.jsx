@@ -3,6 +3,9 @@ import Layout from '../components/layout/Layout'
 import Home from '../pages/Home'
 import NoticiasDetalle from '../pages/NoticiasDetalle'
 import Institucional from '../pages/Institucional'
+import Login from '../pages/Login'
+import PanelAdmin from '../pages/PanelAdmin'
+import RutaProtegida from './RutaProtegida'
 
 function NotFound() {
     return (
@@ -20,8 +23,10 @@ function AppRouter() {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/noticias/:id" element={<NoticiasDetalle />} />
-                    <Route path="*" element={<NotFound />} />
                     <Route path="/institucional" element={<Institucional />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="*" element={<NotFound />} />
+                    <Route path="/admin" element={<RutaProtegida rol="vicedirectora"><PanelAdmin /></RutaProtegida>} />
                 </Routes>
             </Layout>
         </BrowserRouter>

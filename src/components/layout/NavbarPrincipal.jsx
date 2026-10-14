@@ -1,8 +1,29 @@
-import { Container, Image, Nav, Navbar } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Button, Container, Image, Nav, Navbar } from 'react-bootstrap'
+import { Link, useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
+import { useAuth } from '../../context/AuthContext'
 import logoEscuela from '../../assets/LogoEscuelaRoca2.jpeg'
 
 function NavbarPrincipal() {
+    const { usuario, logout } = useAuth()
+    const navigate = useNavigate()
+
+    async function manejarCerrarSesion() {
+        const resultado = await Swal.fire({
+            title: '¿Cerrar sesion?',
+            text: 'Vas a salir de tu cuenta.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Si, salir',
+            cancelButtonText: 'Cancelar',
+        })
+
+        if (resultado.isConfirmed) {
+            logout()
+            navigate('/', { replace: true })
+        }
+    }
+
     return (
         <Navbar bg="light" expand="lg">
             <Container>
@@ -51,12 +72,28 @@ function NavbarPrincipal() {
                             </Nav>
                         </div>
 
-                        <div className="col-12 col-lg-4 d-flex justify-content-center justify-content-lg-end">
-                            <Nav>
-                                <Nav.Link as={Link} to="/login">
-                                    Ingresar
-                                </Nav.Link>
-                            </Nav>
+                        <div className="col-12 col-lg-4 d-flex align-items-center justify-content-center justify-content-lg-end gap-3">
+                            {usuario ? (
+                                <>
+                                    <Navbar.Text>
+                                        {usuario.nombre} · {usuario.rol}
+                                    </Navbar.Text>
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        variant="outline-primary"
+                                        onClick={manejarCerrarSesion}
+                                    >
+                                        Salir
+                                    </Button>
+                                </>
+                            ) : (
+                                <Nav>
+                                    <Nav.Link as={Link} to="/login">
+                                        Ingresar
+                                    </Nav.Link>
+                                </Nav>
+                            )}
                         </div>
                     </div>
                 </Navbar.Collapse>
