@@ -9,6 +9,8 @@ function NoticiasDetalle() {
     if (!noticia) {
         return (
             <Container className="py-5">
+                <title>Noticia no encontrada · Escuela Roca</title>
+                <meta name="robots" content="noindex" />
                 <Alert variant="warning">No se encontro esa noticia.</Alert>
                 <Button as={Link} to="/" variant="primary">
                     Volver al inicio
@@ -19,6 +21,9 @@ function NoticiasDetalle() {
 
     return (
         <Container className="py-5">
+            <title>{`${noticia.titulo} · Escuela Presidente Julio A. Roca`}</title>
+            <meta name="description" content={noticia.descripcion} />
+
             <Button as={Link} to="/" variant="outline-primary" className="mb-4">
                 Volver al inicio
             </Button>

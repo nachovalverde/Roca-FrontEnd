@@ -13,6 +13,9 @@ const ACCESOS_ADMIN = [
 function PanelAdmin() {
     return (
         <Container className="py-5">
+            <title>Panel de administración · Escuela Roca</title>
+            <meta name="robots" content="noindex" />
+
             <h1>Panel de administracion</h1>
             <p className="text-secondary">
                 Desde aca la vicedirectora puede acceder a las herramientas de administracion de la escuela.

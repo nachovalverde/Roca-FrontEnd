@@ -1,0 +1,7 @@
+# Las páginas públicas se pueden indexar; las de uso interno, no
+User-agent: *
+Allow: /
+Disallow: /login
+Disallow: /admin
+Disallow: /docente
+Disallow: /inscripciones
