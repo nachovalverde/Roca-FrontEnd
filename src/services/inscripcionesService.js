@@ -31,7 +31,7 @@ export async function crear(datos) {
 }
 
 export async function actualizar(id, datos) {
-  const incripciones = leerTodas()
+  const inscripciones = leerTodas()
   const anterior = incripciones.find((item) => item.id === id)
   if (!anterior) throw new Error ('No se encuenta esa inscripción')
 
@@ -41,5 +41,5 @@ export async function actualizar(id, datos) {
 }
 
 export async function eliminar(id) {
-  guardarTodas (leerTodas().filtrer((item) => item.id !== id))
+  guardarTodas (leerTodas().filter((item) => item.id !== id))
 }
