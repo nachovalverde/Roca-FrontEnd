@@ -25,7 +25,7 @@ export async function obtener(id) {
 
 export async function crear(datos) {
   const ahora = new Date().toISOString()
-  const nueva = {...datos, id: cripto.randomUUID(), creadaEl: ahora, actualizadaEl: ahora}
+  const nueva = {...datos, id: crypto.randomUUID(), creadaEl: ahora, actualizadaEl: ahora}
   guardarTodas([...leerTodas(), nueva])
   return nueva
 }

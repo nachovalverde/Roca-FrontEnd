@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { Button } from 'react-bootstrap'
-import { SECCIONES_RESUMEN, CAMPOS_CONTACTO, PASO_CONTACTO, PASO_CONTACTOS } from '../../data/etiquetasFicha'
+import { SECCIONES_RESUMEN, CAMPOS_CONTACTO, PASO_CONTACTOS } from '../../data/etiquetasFicha'
 import { calcularEdad } from '../../utils/calcularEdad'
 import { formatearFecha } from '../../utils/formatearFecha'
 
