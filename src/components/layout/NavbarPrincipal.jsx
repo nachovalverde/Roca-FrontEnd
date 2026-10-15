@@ -47,7 +47,7 @@ function NavbarPrincipal() {
                             Escuela Presidente Julio Argentino Roca
                         </span>
                         <span className="small text-secondary">
-                            Nivel Inicial y Primario · Sector Estatal
+                            Nivel Inicial y Primario - Sector Estatal
                         </span>
                     </span>
                 </Navbar.Brand>
