@@ -9,6 +9,7 @@ import RutaProtegida from './RutaProtegida'
 import PanelDocente from '../pages/PanelDocente'
 import NuevaInscripcion from '../pages/NuevaInscripcion'
 import DetalleInscripcion from '../pages/DetalleInscripcion'
+import { ROLES_INSCRIPCIONES } from '../data/roles'
 
 
 
@@ -32,9 +33,10 @@ function AppRouter() {
                     <Route path="/login" element={<Login />} />
                     <Route path="*" element={<NotFound />} />
                     <Route path="/admin" element={<RutaProtegida rol="vicedirectora"><PanelAdmin /></RutaProtegida>} />
-                    <Route path="/docente" element={<PanelDocente />} />
-                    <Route path="/inscripciones/nueva" element={<NuevaInscripcion />} />
-                    <Route path="/inscripciones/:id" element={<DetalleInscripcion />} />
+
+                    <Route path="/docente" element={<RutaProtegida rol={ROLES_INSCRIPCIONES}><PanelDocente /></RutaProtegida>} />
+                    <Route path="/inscripciones/nueva" element={<RutaProtegida rol={ROLES_INSCRIPCIONES}><NuevaInscripcion /></RutaProtegida>} />
+                    <Route path="/inscripciones/:id" element={<RutaProtegida rol={ROLES_INSCRIPCIONES}><DetalleInscripcion /></RutaProtegida>} />
 
                 </Routes>
             </Layout>

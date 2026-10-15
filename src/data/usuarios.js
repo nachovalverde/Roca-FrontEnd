@@ -13,7 +13,7 @@ const usuarios = [
     usuario: 'maestra1',
     password: 'maestra123',
     rol: 'maestro',
-    grado: '1.º',
+    grado: '1°',
     activo: true,
   },
   {
@@ -22,7 +22,7 @@ const usuarios = [
     usuario: 'maestro2',
     password: 'maestro123',
     rol: 'maestro',
-    grado: '2.º',
+    grado: '2°',
     activo: true,
   },
 ]
