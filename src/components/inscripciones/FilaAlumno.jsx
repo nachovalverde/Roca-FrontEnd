@@ -24,7 +24,17 @@ function FilaAlumno({ inscripcion, onEliminar }) {
       <td>{tutor.apellidoNombres || '—'}</td>
       <td>{tutor.telefonos || '—'}</td>
       <td>{formatearFecha(inscripcion.creadaEl)}</td>
-      <td className="text-end">
+      <td className="text-end text-nowrap">
+        <Button
+          as={Link}
+          to={`/inscripciones/${inscripcion.id}/editar`}
+          variant="outline-primary"
+          size="sm"
+          className="me-2"
+          aria-label={`Editar la inscripción de ${alumno.apellidoNombres}`}
+        >
+          Editar
+        </Button>
         <Button
           variant="outline-danger"
           size="sm"

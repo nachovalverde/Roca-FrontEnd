@@ -10,6 +10,7 @@ import PanelDocente from '../pages/PanelDocente'
 import NuevaInscripcion from '../pages/NuevaInscripcion'
 import DetalleInscripcion from '../pages/DetalleInscripcion'
 import { ROLES_INSCRIPCIONES } from '../data/roles'
+import EditarInscripcion from '../pages/EditarInscripcion'
 
 
 
@@ -37,6 +38,7 @@ function AppRouter() {
                     <Route path="/docente" element={<RutaProtegida rol={ROLES_INSCRIPCIONES}><PanelDocente /></RutaProtegida>} />
                     <Route path="/inscripciones/nueva" element={<RutaProtegida rol={ROLES_INSCRIPCIONES}><NuevaInscripcion /></RutaProtegida>} />
                     <Route path="/inscripciones/:id" element={<RutaProtegida rol={ROLES_INSCRIPCIONES}><DetalleInscripcion /></RutaProtegida>} />
+                    <Route path="/inscripciones/:id/editar" element={<RutaProtegida rol={ROLES_INSCRIPCIONES}><EditarInscripcion /></RutaProtegida>} />
 
                 </Routes>
             </Layout>
