@@ -1,6 +1,6 @@
 import { Col, Form } from 'react-bootstrap'
 
-function CampoSelect({ id, label, name, value, onChange, opciones, md = 6, requerido = false, error }) {
+function CampoSelect({ id, label, name, value, onChange, opciones, md = 6, requerido = false, error, opcionVacia = 'Elegí una opción',  }) {
   return (
     <Col md={md}>
       <Form.Group controlId={id}>
@@ -15,7 +15,7 @@ function CampoSelect({ id, label, name, value, onChange, opciones, md = 6, reque
           required={requerido}
           isInvalid={Boolean(error)}
         >
-          <option value="">Elegí una opción</option>
+          <option value="">{opcionVacia}</option>
           {opciones.map((opcion) => (
             <option key={opcion} value={opcion}>
               {opcion}
