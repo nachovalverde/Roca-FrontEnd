@@ -32,8 +32,8 @@ export async function crear(datos) {
 
 export async function actualizar(id, datos) {
   const inscripciones = leerTodas()
-  const anterior = incripciones.find((item) => item.id === id)
-  if (!anterior) throw new Error ('No se encuenta esa inscripción')
+  const anterior = incsripciones.find((item) => item.id === id)
+  if (!anterior) throw new Error ('No se encuentra esa inscripción')
 
   const actualizada = {...anterior, ...datos, id, actualizadaEl: new Date().toISOString() }
   guardarTodas(inscripciones.map((item) => (item.id === id ? actualizada : item)))
