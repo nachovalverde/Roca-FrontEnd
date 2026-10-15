@@ -17,7 +17,7 @@ function RutaProtegida({ rol, children }) {
     }
 
     if (!usuario) {
-        // Le pasa al login la página que quería abrir, para volver ahí después
+        
         return <Navigate to="/login" replace state={{ desde: location.pathname }} />
     }
 
