@@ -5,9 +5,10 @@ import CampoOpciones from '../common/CampoOpciones'
 import { GRADOS, SI_NO, TUTORES } from '../../data/opcionesFicha'
 import { calcularEdad } from '../../utils/calcularEdad'
 import { soloDigitos, soloLetras } from '../../utils/filtros'
+import SelectorLugarNacimiento from './SelectorLugarNacimiento'
 
 function PasoAlumno({ datos, onChange, errores = {} }) {
- 
+
   const edad = calcularEdad(datos.fechaNacimiento)
 
   return (
@@ -29,10 +30,15 @@ function PasoAlumno({ datos, onChange, errores = {} }) {
             <Form.Control plaintext readOnly value={edad === '' ? '' : `${edad} años`} />
           </Form.Group>
         </Col>
+
         <CampoTexto id="alumno-actaNacimiento" label="N.º de acta de nacimiento" name="actaNacimiento"
-          value={datos.actaNacimiento} onChange={onChange} md={3} />
-        <CampoTexto id="alumno-lugarNacimiento" label="Lugar de nacimiento" name="lugarNacimiento"
-          value={datos.lugarNacimiento} onChange={onChange} md={3} />
+          value={datos.actaNacimiento} onChange={onChange} md={6} />
+
+        <SelectorLugarNacimiento
+          provincia={datos.provinciaNacimiento}
+          localidad={datos.lugarNacimiento}
+          onChange={onChange}
+        />
 
         <CampoTexto id="alumno-domicilio" label="Domicilio" name="domicilio"
           value={datos.domicilio} onChange={onChange} md={12}
