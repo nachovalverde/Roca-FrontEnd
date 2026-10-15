@@ -37,7 +37,7 @@ git clone https://github.com/nachovalverde/Roca-FrontEnd.git
 
 Entra en la carpeta:
 
-cd TFI-ROCA
+cd Roca-FrontEnd
 
 Instala las dependencias:
 
