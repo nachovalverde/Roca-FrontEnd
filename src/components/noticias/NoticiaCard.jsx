@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 function NoticiaCard({ noticia }) {
     return (
-        <Card className="h-100 shadow-sm">
+        <Card as="article" className="h-100 shadow-sm">
             <Card.Img
                 variant="top"
                 src={noticia.imagen}

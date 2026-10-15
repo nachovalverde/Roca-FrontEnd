@@ -3,6 +3,12 @@ import { Card, Col, Container, Row } from 'react-bootstrap'
 function Institucional() {
     return (
         <Container className="py-5">
+            <title>Institucional · Escuela Presidente Julio A. Roca</title>
+            <meta
+                name="description"
+                content="Conocé la Escuela Presidente Julio Argentino Roca: niveles, dirección en España 507, teléfonos y correo de contacto."
+            />
+
             <header className="mb-4">
                 <p className="text-primary fw-semibold mb-2">
                     Nuestra escuela

@@ -32,6 +32,9 @@ function Login() {
 
     return (
         <Container className="py-5">
+            <title>Ingresar · Escuela Roca</title>
+            <meta name="robots" content="noindex" />
+
             <Card className="mx-auto" style={{ maxWidth: '450px' }}>
                 <Card.Body className="p-4">
                     <h1 className="h3 mb-4">Ingresar</h1>

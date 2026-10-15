@@ -16,6 +16,12 @@ function Home() {
 
     return (
         <>
+            <title>Inicio · Escuela Presidente Julio A. Roca</title>
+            <meta
+                name="description"
+                content="Novedades, comunicados y actividades de la Escuela Presidente Julio Argentino Roca, Nivel Inicial y Primario, en San Miguel de Tucumán."
+            />
+
             <HeroInicio
                 titulo="Bienvenidos a nuestra comunidad educativa"
                 subtitulo="Conoce las novedades, actividades y comunicados de la Escuela Presidente Julio Argentino Roca"
