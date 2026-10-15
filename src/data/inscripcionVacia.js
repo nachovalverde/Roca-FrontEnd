@@ -19,6 +19,7 @@ export const inscripcionVacia = {
     dni: '',
     fechaNacimiento: '',
     actaNacimiento: '',
+    provinciaNacimiento: '',
     lugarNacimiento: '',
     domicilio: '',
     grado: '',
