@@ -6,6 +6,11 @@ import Institucional from '../pages/Institucional'
 import Login from '../pages/Login'
 import PanelAdmin from '../pages/PanelAdmin'
 import RutaProtegida from './RutaProtegida'
+import PanelDocente from '../pages/PanelDocente'
+import NuevaInscripcion from '../pages/NuevaInscripcion'
+import DetalleInscripcion from '../pages/DetalleInscripcion'
+
+
 
 function NotFound() {
     return (
@@ -27,6 +32,10 @@ function AppRouter() {
                     <Route path="/login" element={<Login />} />
                     <Route path="*" element={<NotFound />} />
                     <Route path="/admin" element={<RutaProtegida rol="vicedirectora"><PanelAdmin /></RutaProtegida>} />
+                    <Route path="/docente" element={<PanelDocente />} />
+                    <Route path="/inscripciones/nueva" element={<NuevaInscripcion />} />
+                    <Route path="/inscripciones/:id" element={<DetalleInscripcion />} />
+
                 </Routes>
             </Layout>
         </BrowserRouter>
