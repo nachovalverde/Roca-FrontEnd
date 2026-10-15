@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { Alert, Button, Card, Container, Form } from 'react-bootstrap'
 import { useAuth } from '../context/AuthContext'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { RUTA_POR_ROL } from '../data/roles'
 
 function Login() {
     const { login } = useAuth()
     const navigate = useNavigate()
+    const location = useLocation()
 
     const [nombreUsuario, setNombreUsuario] = useState('')
     const [password, setPassword] = useState('')
@@ -20,11 +22,9 @@ function Login() {
         try {
             const usuarioAutenticado = login(nombreUsuario, password)
 
-            if (usuarioAutenticado.rol === 'vicedirectora') {
-                navigate('/admin', { replace: true })
-            } else {
-                navigate('/', { replace: true })
-            }
+            // Si venía de una página protegida vuelve ahí; si no, va al panel de su rol
+            const destino = location.state?.desde ?? RUTA_POR_ROL[usuarioAutenticado.rol] ?? '/'
+            navigate(destino, { replace: true })
         } catch (errorLogin) {
             setError(errorLogin.message)
         }
