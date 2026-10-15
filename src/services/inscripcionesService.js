@@ -32,7 +32,7 @@ export async function crear(datos) {
 
 export async function actualizar(id, datos) {
   const inscripciones = leerTodas()
-  const anterior = incsripciones.find((item) => item.id === id)
+  const anterior = inscripciones.find((item) => item.id === id)
   if (!anterior) throw new Error ('No se encuentra esa inscripción')
 
   const actualizada = {...anterior, ...datos, id, actualizadaEl: new Date().toISOString() }
