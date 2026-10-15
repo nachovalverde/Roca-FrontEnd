@@ -2,6 +2,7 @@ import { Button, Container, Image, Nav, Navbar } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { useAuth } from '../../context/AuthContext'
+import { RUTA_POR_ROL } from '../../data/roles'
 import logoEscuela from '../../assets/LogoEscuelaRoca2.jpeg'
 
 function NavbarPrincipal() {
@@ -69,6 +70,11 @@ function NavbarPrincipal() {
                                 <Nav.Link as={Link} to="/institucional">
                                     Institucional
                                 </Nav.Link>
+                                {usuario && RUTA_POR_ROL[usuario.rol] && (
+                                    <Nav.Link as={Link} to={RUTA_POR_ROL[usuario.rol]}>
+                                        Mi panel
+                                    </Nav.Link>
+                                )}
                             </Nav>
                         </div>
 
