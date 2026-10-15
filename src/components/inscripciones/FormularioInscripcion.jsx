@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Card, Form, Button, Alert } from 'react-bootstrap'
 import IndicadorPasos from './IndicadorPasos'
 import PasoAlumno from './PasoAlumno'
@@ -10,10 +10,20 @@ import { inscripcionVacia } from '../../data/inscripcionVacia'
 import { validarPaso, hayErrores } from '../../utils/validarInscripcion'
 import ResumenInscripcion from './ResumenInscripcion'
 
-function FormularioInscripcion({ inscripcionInicial = inscripcionVacia, onGuardar }) {
+
+function FormularioInscripcion({
+  inscripcionInicial = inscripcionVacia,
+  onGuardar,
+  onCambio,
+  textoGuardar = 'Guardar inscripción',
+}) {
   const [datos, setDatos] = useState(inscripcionInicial)
   const [pasoActual, setPasoActual] = useState(0)
   const [mostrarErrores, setMostrarErrores] = useState(false)
+  useEffect(() => {
+    onCambio?.(datos)
+  }, [datos, onCambio])
+
 
   const esPrimerPaso = pasoActual === 0
   const esUltimoPaso = pasoActual === PASOS.length - 1
@@ -148,7 +158,7 @@ function FormularioInscripcion({ inscripcionInicial = inscripcionVacia, onGuarda
               Anterior
             </Button>
             <Button type="submit" variant="primary">
-              {esUltimoPaso ? 'Guardar inscripción' : 'Siguiente'}
+              {esUltimoPaso ? textoGuardar : 'Siguiente'}
             </Button>
           </div>
         </Form>
