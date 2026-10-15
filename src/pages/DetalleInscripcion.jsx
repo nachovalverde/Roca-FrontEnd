@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
-import { Container, Card, Alert, Spinner } from 'react-bootstrap'
+import { Alert, Button, Card, Container, Spinner } from 'react-bootstrap'
 import ResumenInscripcion from '../components/inscripciones/ResumenInscripcion'
 import * as inscripcionesService from '../services/inscripcionesService'
 import { formatearFecha } from '../utils/formatearFecha'
@@ -65,10 +65,18 @@ function DetalleInscripcion() {
 
       {recienGuardada && <Alert variant="success">La inscripción se guardó correctamente.</Alert>}
 
-      <h1 className="h2 mb-1">{alumno.apellidoNombres}</h1>
-      <p className="text-body-secondary mb-4">
-        {alumno.grado} · DNI {alumno.dni} · cargada el {formatearFecha(inscripcion.creadaEl)}
-      </p>
+      <div className="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+        <div>
+          <h1 className="h2 mb-1">{alumno.apellidoNombres}</h1>
+          <p className="text-body-secondary mb-0">
+            {alumno.grado} · DNI {alumno.dni} · cargada el {formatearFecha(inscripcion.creadaEl)}
+          </p>
+        </div>
+        <Button as={Link} to={`/inscripciones/${id}/editar`} variant="outline-primary">
+          Editar
+        </Button>
+      </div>
+
 
       <Card>
         <Card.Body className="p-4">
