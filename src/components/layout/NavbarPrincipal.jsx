@@ -11,11 +11,11 @@ function NavbarPrincipal() {
 
     async function manejarCerrarSesion() {
         const resultado = await Swal.fire({
-            title: '¿Cerrar sesion?',
+            title: '¿Cerrar sesión?',
             text: 'Vas a salir de tu cuenta.',
             icon: 'question',
             showCancelButton: true,
-            confirmButtonText: 'Si, salir',
+            confirmButtonText: 'Sí, salir',
             cancelButtonText: 'Cancelar',
         })
 
@@ -27,22 +27,52 @@ function NavbarPrincipal() {
 
     return (
         <Navbar bg="light" expand="lg">
-            <Container>
+            <Container className="flex-wrap">
                 <Navbar.Brand
                     as={Link}
                     to="/"
-                    className="col-auto col-lg-3 d-flex align-items-center gap-2 me-0"
+                    className="d-flex align-items-center gap-2 me-2 flex-grow-1 flex-lg-grow-0 flex-shrink-1 text-wrap"
+                    style={{
+                        minWidth: 0,
+                        maxWidth: 'calc(100% - 72px)',
+                    }}
                 >
                     <Image
                         src={logoEscuela}
                         alt="Logo de la Escuela Roca"
-                        style={{
-                            width: '80px',
-                            height: 'auto',
-                            objectFit: 'contain',
-                        }}
+                        className="d-block d-sm-none flex-shrink-0"
+                        style={{ width: '48px', height: 'auto' }}
                     />
-                    <span className="d-flex flex-column lh-sm">
+
+                    <Image
+                        src={logoEscuela}
+                        alt="Logo de la Escuela Roca"
+                        className="d-none d-sm-block d-md-none flex-shrink-0"
+                        style={{ width: '56px', height: 'auto' }}
+                    />
+
+                    <Image
+                        src={logoEscuela}
+                        alt="Logo de la Escuela Roca"
+                        className="d-none d-md-block d-lg-none flex-shrink-0"
+                        style={{ width: '64px', height: 'auto' }}
+                    />
+
+                    <Image
+                        src={logoEscuela}
+                        alt="Logo de la Escuela Roca"
+                        className="d-none d-lg-block d-xl-none flex-shrink-0"
+                        style={{ width: '72px', height: 'auto' }}
+                    />
+
+                    <Image
+                        src={logoEscuela}
+                        alt="Logo de la Escuela Roca"
+                        className="d-none d-xl-block flex-shrink-0"
+                        style={{ width: '80px', height: 'auto' }}
+                    />
+
+                    <span className="d-none d-xl-flex flex-column lh-sm">
                         <span className="small fw-semibold">
                             Escuela Presidente Julio Argentino Roca
                         </span>
@@ -50,40 +80,61 @@ function NavbarPrincipal() {
                             Nivel Inicial y Primario - Sector Estatal
                         </span>
                     </span>
+
+                    <span className="d-flex d-xl-none flex-column lh-sm">
+                        <span className="small fw-semibold">
+                            Escuela Presidente Julio A. Roca
+                        </span>
+                        <span className="small text-secondary">
+                            Nivel Inicial y Primario
+                        </span>
+                    </span>
                 </Navbar.Brand>
 
                 <Navbar.Toggle
                     aria-controls="navegacion-principal"
-                    className="ms-auto"
+                    className="ms-auto flex-shrink-0"
                 />
 
                 <Navbar.Collapse
                     id="navegacion-principal"
-                    className="col-12 col-lg-9"
+                    className="flex-grow-1"
                 >
                     <div className="row w-100 align-items-center">
-                        <div className="col-12 col-lg-8 d-flex justify-content-center">
-                            <Nav>
+                        <div className="d-none d-lg-flex col-lg-8 justify-content-center">
+                            <Nav
+                                className="flex-row align-items-center"
+                                style={{
+                                    transform:
+                                        'translateX(clamp(0px, calc(507.6px - 42.3vw), 88px))',
+                                }}
+                            >
                                 <Nav.Link as={Link} to="/">
                                     Inicio
                                 </Nav.Link>
+
                                 <Nav.Link as={Link} to="/institucional">
                                     Institucional
                                 </Nav.Link>
+
                                 {usuario && RUTA_POR_ROL[usuario.rol] && (
-                                    <Nav.Link as={Link} to={RUTA_POR_ROL[usuario.rol]}>
+                                    <Nav.Link
+                                        as={Link}
+                                        to={RUTA_POR_ROL[usuario.rol]}
+                                    >
                                         Mi panel
                                     </Nav.Link>
                                 )}
                             </Nav>
                         </div>
 
-                        <div className="col-12 col-lg-4 d-flex align-items-center justify-content-center justify-content-lg-end gap-3">
+                        <div className="d-none d-lg-flex col-lg-4 align-items-center justify-content-end">
                             {usuario ? (
-                                <>
+                                <div className="d-flex align-items-center gap-3">
                                     <Navbar.Text>
                                         {usuario.nombre} · {usuario.rol}
                                     </Navbar.Text>
+
                                     <Button
                                         type="button"
                                         size="sm"
@@ -92,7 +143,7 @@ function NavbarPrincipal() {
                                     >
                                         Salir
                                     </Button>
-                                </>
+                                </div>
                             ) : (
                                 <Nav>
                                     <Nav.Link as={Link} to="/login">
@@ -100,6 +151,49 @@ function NavbarPrincipal() {
                                     </Nav.Link>
                                 </Nav>
                             )}
+                        </div>
+
+                        <div className="col-12 d-lg-none">
+                            <Nav className="flex-column align-items-end text-end">
+                                <Nav.Link as={Link} to="/">
+                                    Inicio
+                                </Nav.Link>
+
+                                <Nav.Link as={Link} to="/institucional">
+                                    Institucional
+                                </Nav.Link>
+
+                                {usuario && RUTA_POR_ROL[usuario.rol] && (
+                                    <Nav.Link
+                                        as={Link}
+                                        to={RUTA_POR_ROL[usuario.rol]}
+                                    >
+                                        Mi panel
+                                    </Nav.Link>
+                                )}
+
+                                {usuario ? (
+                                    <>
+                                        <Navbar.Text>
+                                            {usuario.nombre} · {usuario.rol}
+                                        </Navbar.Text>
+
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            variant="outline-primary"
+                                            className="my-2"
+                                            onClick={manejarCerrarSesion}
+                                        >
+                                            Salir
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <Nav.Link as={Link} to="/login">
+                                        Ingresar
+                                    </Nav.Link>
+                                )}
+                            </Nav>
                         </div>
                     </div>
                 </Navbar.Collapse>
