@@ -26,7 +26,7 @@ function NoticiaCard({ noticia }) {
                     as={Link}
                     to={`/noticias/${noticia.id}`}
                     variant="primary"
-                    className="mt-auto aling-self-start"
+                    className="mt-auto align-self-start"
                 >
                     Leer noticia
                 </Button>
