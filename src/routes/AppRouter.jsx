@@ -19,8 +19,8 @@ function NotFound() {
         <div className="container py-5">
             <title>Página no encontrada · Escuela Roca</title>
             <meta name="robots" content="noindex" />
-            <h1>Pagina no encontrada</h1>
-            <p>La pagina que busca no existe.</p>
+            <h1>Página no encontrada</h1>
+            <p>La página que buscás no existe.</p>
         </div>
     )
 }

@@ -11,7 +11,7 @@ function NoticiasDetalle() {
             <Container className="py-5">
                 <title>Noticia no encontrada · Escuela Roca</title>
                 <meta name="robots" content="noindex" />
-                <Alert variant="warning">No se encontro esa noticia.</Alert>
+                <Alert variant="warning">No encontramos esa noticia.</Alert>
                 <Button as={Link} to="/" variant="primary">
                     Volver al inicio
                 </Button>

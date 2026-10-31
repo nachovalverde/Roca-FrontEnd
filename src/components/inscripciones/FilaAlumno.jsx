@@ -19,17 +19,16 @@ function FilaAlumno({ inscripcion, onEliminar }) {
           {alumno.apellidoNombres}
         </Link>
       </td>
-      <td>{alumno.dni}</td>
+      <td className="d-none d-sm-table-cell">{alumno.dni}</td>
       <td>{alumno.grado}</td>
-      <td>{tutor.apellidoNombres || '—'}</td>
-      <td>{tutor.telefonos || '—'}</td>
-      <td>{formatearFecha(inscripcion.creadaEl)}</td>
+      <td className="d-none d-lg-table-cell">{tutor.apellidoNombres || '—'}</td>
+      <td className="d-none d-md-table-cell">{tutor.telefonos || '—'}</td>
+      <td className="d-none d-lg-table-cell">{formatearFecha(inscripcion.creadaEl)}</td>
       <td className="text-end text-nowrap">
         <Button
           as={Link}
           to={`/inscripciones/${inscripcion.id}/editar`}
           variant="outline-primary"
-          size="sm"
           className="me-2"
           aria-label={`Editar la inscripción de ${alumno.apellidoNombres}`}
         >
@@ -37,7 +36,6 @@ function FilaAlumno({ inscripcion, onEliminar }) {
         </Button>
         <Button
           variant="outline-danger"
-          size="sm"
           aria-label={`Eliminar la inscripción de ${alumno.apellidoNombres}`}
           onClick={() => onEliminar(inscripcion)}
         >

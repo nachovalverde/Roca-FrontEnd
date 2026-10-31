@@ -5,14 +5,14 @@ const noticias = [
     id: 1,
     categoria: 'Comunicados',
     titulo: 'Inicio de clases',
-    descripcion: 'Compartimos informacion importante para las familias de nuestra comunidad.',
+    descripcion: 'Compartimos información importante para las familias de nuestra comunidad.',
     imagen: fachada,
   },
   {
     id: 2,
     categoria: 'Actividades',
     titulo: 'Actividades escolares',
-    descripcion: 'Conoce algunas de las actividades realizadas en nuestra escuela.',
+    descripcion: 'Conocé algunas de las actividades realizadas en nuestra escuela.',
     imagen: fachada,
   },
   {

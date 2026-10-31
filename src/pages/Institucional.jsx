@@ -23,12 +23,12 @@ function Institucional() {
                 <Col md={7}>
                     <Card className="h-100">
                         <Card.Body>
-                            <Card.Title>Informacion institucional</Card.Title>
+                            <Card.Title>Información institucional</Card.Title>
                             <p className="text-secondary">
                                 CUE: 900076300 - Anexo: 00
                             </p>
                             <p className="text-secondary mb-0">
-                                Zona de supervision N° 1 - Primaria - Capital
+                                Zona de supervisión N.º 1 · Primaria · Capital
                             </p>
                         </Card.Body>
                     </Card>
@@ -41,7 +41,7 @@ function Institucional() {
                             <address className="text-secondary mb-0">
                                 España 507 <br />
                                 San Miguel de Tucumán, Tucumán <br />
-                                Codigo postal T4000
+                                Código postal T4000
                             </address>
 
                             <p className="mt-3 mb-2">

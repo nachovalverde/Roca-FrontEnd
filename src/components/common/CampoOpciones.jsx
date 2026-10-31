@@ -1,4 +1,4 @@
-import { Col, Form } from 'react-bootstrap'
+import { Col, Form, ToggleButton } from 'react-bootstrap'
 
 function CampoOpciones({ id, label, name, value, onChange, opciones, md = 6, requerido = false, error }) {
   return (
@@ -8,19 +8,21 @@ function CampoOpciones({ id, label, name, value, onChange, opciones, md = 6, req
           {label}
           {requerido && <span className="text-danger" aria-hidden="true"> *</span>}
         </Form.Label>
-        <div>
+        {/* Botones en lugar de círculos de 16 px: se tocan fácil con el dedo en el celular */}
+        <div className="d-flex flex-wrap gap-2">
           {opciones.map((opcion) => (
-            <Form.Check
+            <ToggleButton
               key={opcion}
-              inline
-              type="radio"
               id={`${id}-${opcion}`}
+              type="radio"
               name={id}
-              label={opcion}
+              value={opcion}
               checked={value === opcion}
               onChange={() => onChange(name, opcion)}
-              isInvalid={Boolean(error)}
-            />
+              variant={error ? 'outline-danger' : 'outline-primary'}
+            >
+              {opcion}
+            </ToggleButton>
           ))}
         </div>
         {error && <div className="invalid-feedback d-block">{error}</div>}
