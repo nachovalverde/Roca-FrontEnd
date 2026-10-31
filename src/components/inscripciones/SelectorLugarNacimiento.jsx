@@ -4,11 +4,12 @@ import CampoSelect from '../common/CampoSelect'
 import CampoTexto from '../common/CampoTexto'
 import { listarLocalidades, listarProvincias } from '../../services/georefService'
 
-function avisarError(titulo) {
+// El texto viene del servicio: explica si es falta de internet o si el servicio está saturado
+function avisarError(titulo, texto) {
   Swal.fire({
     icon: 'error',
     title: titulo,
-    text: 'Revisá la conexión a internet. Mientras tanto, podés escribir el lugar a mano.',
+    text: texto,
     confirmButtonText: 'Entendido',
   })
 }
@@ -25,9 +26,9 @@ function SelectorLugarNacimiento({ provincia = '', localidad = '', onChange }) {
   useEffect(() => {
     listarProvincias()
       .then(setProvincias)
-      .catch(() => {
+      .catch((error) => {
         setFalloLaApi(true)
-        avisarError('No pudimos cargar las provincias')
+        avisarError('No pudimos cargar las provincias', error.message)
       })
   }, [])
 
@@ -40,10 +41,10 @@ function SelectorLugarNacimiento({ provincia = '', localidad = '', onChange }) {
       .then((nombres) => {
         if (vigente) setLocalidades({ provinciaId, nombres })
       })
-      .catch(() => {
+      .catch((error) => {
         if (vigente) {
           setFalloLaApi(true)
-          avisarError('No pudimos cargar las localidades')
+          avisarError('No pudimos cargar las localidades', error.message)
         }
       })
 
