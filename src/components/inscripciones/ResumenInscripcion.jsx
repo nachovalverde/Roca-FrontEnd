@@ -57,7 +57,7 @@ function ResumenInscripcion ({ datos, onEditarPaso }) {
           />
           {datos.contactos.map ((contacto, indice) => (
             <Fragment key={indice}>
-              <h3 className="h6">Contacto N° {indice+1}</h3>
+              <h3 className="h6">Contacto N.º {indice + 1}</h3>
               <FilasDatos campos= {CAMPOS_CONTACTO} datos= {contacto} />
             </Fragment>
           ))}

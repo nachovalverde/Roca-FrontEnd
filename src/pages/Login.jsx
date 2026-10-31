@@ -66,7 +66,7 @@ function Login() {
                         </Form.Group>
 
                         <Button type="submit" variant="primary" className="w-100">
-                            Iniciar sesion
+                            Iniciar sesión
                         </Button>
                     </Form>
                 </Card.Body>

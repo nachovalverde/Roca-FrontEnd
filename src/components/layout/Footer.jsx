@@ -10,7 +10,7 @@ function Footer() {
                             Escuela Presidente Julio Argentino Roca
                         </h2>
                         <p className="small text-white mb-0">
-                            Nivel Inicial y Primario - Sector Estatal
+                            Nivel Inicial y Primario · Sector Estatal
                         </p>
                     </Col>
 

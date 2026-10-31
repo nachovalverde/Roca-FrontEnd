@@ -24,7 +24,7 @@ function Home() {
 
             <HeroInicio
                 titulo="Bienvenidos a nuestra comunidad educativa"
-                subtitulo="Conoce las novedades, actividades y comunicados de la Escuela Presidente Julio Argentino Roca"
+                subtitulo="Conocé las novedades, actividades y comunicados de la Escuela Presidente Julio Argentino Roca"
             />
 
             <section id="novedades" className="py-5">

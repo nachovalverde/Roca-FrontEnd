@@ -2,7 +2,7 @@ import { Button, Container, Image, Nav, Navbar } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { useAuth } from '../../context/AuthContext'
-import { RUTA_POR_ROL } from '../../data/roles'
+import { NOMBRE_ROL, RUTA_POR_ROL } from '../../data/roles'
 import logoEscuela from '../../assets/LogoEscuelaRoca2.jpeg'
 
 function NavbarPrincipal() {
@@ -77,7 +77,7 @@ function NavbarPrincipal() {
                             Escuela Presidente Julio Argentino Roca
                         </span>
                         <span className="small text-secondary">
-                            Nivel Inicial y Primario - Sector Estatal
+                            Nivel Inicial y Primario · Sector Estatal
                         </span>
                     </span>
 
@@ -91,7 +91,7 @@ function NavbarPrincipal() {
                     </span>
                 </Navbar.Brand>
 
-                <Navbar.Toggle
+                <Navbar.Toggle label="Abrir o cerrar el menú"
                     aria-controls="navegacion-principal"
                     className="ms-auto flex-shrink-0"
                 />
@@ -132,7 +132,7 @@ function NavbarPrincipal() {
                             {usuario ? (
                                 <div className="d-flex align-items-center gap-3">
                                     <Navbar.Text>
-                                        {usuario.nombre} · {usuario.rol}
+                                        {usuario.nombre} · {NOMBRE_ROL[usuario.rol] ?? usuario.rol}
                                     </Navbar.Text>
 
                                     <Button
@@ -175,7 +175,7 @@ function NavbarPrincipal() {
                                 {usuario ? (
                                     <>
                                         <Navbar.Text>
-                                            {usuario.nombre} · {usuario.rol}
+                                            {usuario.nombre} · {NOMBRE_ROL[usuario.rol] ?? usuario.rol}
                                         </Navbar.Text>
 
                                         <Button

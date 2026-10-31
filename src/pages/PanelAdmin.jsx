@@ -16,9 +16,9 @@ function PanelAdmin() {
             <title>Panel de administración · Escuela Roca</title>
             <meta name="robots" content="noindex" />
 
-            <h1>Panel de administracion</h1>
+            <h1>Panel de administración</h1>
             <p className="text-secondary">
-                Desde aca la vicedirectora puede acceder a las herramientas de administracion de la escuela.
+                Desde acá la vicedirectora accede a las herramientas de administración de la escuela.
             </p>
 
             <Row className="g-3 mt-2">

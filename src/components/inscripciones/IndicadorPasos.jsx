@@ -2,7 +2,7 @@ import { Nav } from 'react-bootstrap'
 
 function IndicadorPasos({ pasos, pasoActual, onIrAPaso }) {
   return (
-    <Nav variant="underline" className="mb-4 flex-nowrap overflow-auto">
+    <Nav variant="underline" className="mb-4 flex-wrap">
       {pasos.map((paso, indice) => (
         <Nav.Item key={paso}>
           <Nav.Link
