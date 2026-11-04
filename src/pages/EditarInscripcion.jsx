@@ -4,10 +4,12 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Alert, Container, Spinner } from 'react-bootstrap'
 import FormularioInscripcion from '../components/inscripciones/FormularioInscripcion'
 import * as inscripcionesService from '../services/inscripcionesService'
+import { useAuth } from '../context/AuthContext'
 
 function EditarInscripcion() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { usuario } = useAuth()
 
   const [inscripcion, setInscripcion] = useState(null)
   const [cargando, setCargando] = useState(true)
@@ -28,7 +30,7 @@ function EditarInscripcion() {
   }, [id])
 
   const guardar = async (datos) => {
-    await inscripcionesService.actualizar(id, datos)
+    await inscripcionesService.actualizar(id, datos, usuario)
     navigate(`/inscripciones/${id}`, { state: { recienGuardada: true } })
   }
 

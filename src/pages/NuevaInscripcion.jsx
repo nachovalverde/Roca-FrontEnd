@@ -5,6 +5,7 @@ import FormularioInscripcion from '../components/inscripciones/FormularioInscrip
 import { inscripcionVacia } from '../data/inscripcionVacia'
 import * as inscripcionesService from '../services/inscripcionesService'
 import { borrarBorrador, guardarBorrador, leerBorrador } from '../services/borradorService'
+import { useAuth } from '../context/AuthContext'
 
 // '2026-10-15T14:30:00Z' → '15/10, 11:30'
 function formatearMomento(fechaISO) {
@@ -18,6 +19,7 @@ function formatearMomento(fechaISO) {
 
 function NuevaInscripcion() {
   const navigate = useNavigate()
+  const { usuario } = useAuth()
 
   // El borrador se lee una sola vez, al entrar a la página
   const [borrador, setBorrador] = useState(() => leerBorrador())
@@ -31,7 +33,7 @@ function NuevaInscripcion() {
   }
 
   const guardar = async (datos) => {
-    const nueva = await inscripcionesService.crear(datos)
+    const nueva = await inscripcionesService.crear(datos, usuario)
     borrarBorrador()
     navigate(`/inscripciones/${nueva.id}`, { state: { recienGuardada: true } })
   }
