@@ -2,7 +2,7 @@ const MENSAJE_OBLIGATORIO = 'Completá este campo'
 
 // Campos obligatorios de cada sección. 
 export const CAMPOS_REQUERIDOS = {
-  alumno: ['apellidoNombres', 'dni', 'fechaNacimiento', 'domicilio', 'grado', 'repitente', 'tutor'],
+  alumno: ['apellidoNombres', 'dni', 'fechaNacimiento', 'domicilio', 'grado', 'repitente', 'tutor', 'sexo', 'cicloLectivo'],
   tutor: ['apellidoNombres', 'dni', 'telefonos'],
   vivienda: ['personasEnCasa', 'tenencia', 'tipo'],
   contacto: ['apellidoNombres', 'parentesco', 'telefonos'],

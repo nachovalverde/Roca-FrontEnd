@@ -19,11 +19,13 @@ export const SECCIONES_RESUMEN = [
     campos: [
       ['apellidoNombres', 'Apellido y nombres'],
       ['dni', 'CUIL o DNI'],
+      ['sexo', 'Sexo según DNI'],
       ['fechaNacimiento', 'Fecha de nacimiento'],
       ['actaNacimiento', 'N.º de acta de nacimiento'],
       ['provinciaNacimiento', 'Provincia de nacimiento'],
       ['lugarNacimiento', 'Localidad de nacimiento'],
       ['domicilio', 'Domicilio'],
+      ['cicloLectivo', 'Ciclo Lectivo'],
       ['grado', 'Grado en el que se inscribe'],
       ['repitente', 'Repitente'],
       ['escuelaOrigen', 'Escuela de origen'],
