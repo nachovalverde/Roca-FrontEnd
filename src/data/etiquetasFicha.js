@@ -25,7 +25,7 @@ export const SECCIONES_RESUMEN = [
       ['provinciaNacimiento', 'Provincia de nacimiento'],
       ['lugarNacimiento', 'Localidad de nacimiento'],
       ['domicilio', 'Domicilio'],
-      ['cicloLectivo', 'Ciclo Lectivo'],
+      ['cicloLectivo', 'Ciclo lectivo'],
       ['grado', 'Grado en el que se inscribe'],
       ['repitente', 'Repitente'],
       ['escuelaOrigen', 'Escuela de origen'],
