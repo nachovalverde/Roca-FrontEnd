@@ -24,23 +24,25 @@ function FilaAlumno({ inscripcion, onEliminar }) {
       <td className="d-none d-lg-table-cell">{tutor.apellidoNombres || '—'}</td>
       <td className="d-none d-md-table-cell">{tutor.telefonos || '—'}</td>
       <td className="d-none d-lg-table-cell">{formatearFecha(inscripcion.creadaEl)}</td>
-      <td className="text-end text-nowrap">
-        <Button
-          as={Link}
-          to={`/inscripciones/${inscripcion.id}/editar`}
-          variant="outline-primary"
-          className="me-2"
-          aria-label={`Editar la inscripción de ${alumno.apellidoNombres}`}
-        >
-          Editar
-        </Button>
-        <Button
-          variant="outline-danger"
-          aria-label={`Eliminar la inscripción de ${alumno.apellidoNombres}`}
-          onClick={() => onEliminar(inscripcion)}
-        >
-          Eliminar
-        </Button>
+      <td>
+        {/* En el celular los botones pasan uno debajo del otro, así la tabla entra sin deslizarse */}
+        <div className="d-flex flex-wrap justify-content-end gap-2">
+          <Button
+            as={Link}
+            to={`/inscripciones/${inscripcion.id}/editar`}
+            variant="outline-primary"
+            aria-label={`Editar la inscripción de ${alumno.apellidoNombres}`}
+          >
+            Editar
+          </Button>
+          <Button
+            variant="outline-danger"
+            aria-label={`Eliminar la inscripción de ${alumno.apellidoNombres}`}
+            onClick={() => onEliminar(inscripcion)}
+          >
+            Eliminar
+          </Button>
+        </div>
       </td>
     </tr>
   )
