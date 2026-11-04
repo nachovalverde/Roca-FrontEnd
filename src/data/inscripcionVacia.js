@@ -17,11 +17,13 @@ export const inscripcionVacia = {
   alumno: {
     apellidoNombres: '',
     dni: '',
+    sexo:'',
     fechaNacimiento: '',
     actaNacimiento: '',
     provinciaNacimiento: '',
     lugarNacimiento: '',
     domicilio: '',
+    cicloLectivo:'',
     grado: '',
     repitente: '',
     escuelaOrigen: '',

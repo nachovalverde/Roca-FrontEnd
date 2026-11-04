@@ -1,5 +1,8 @@
+import { generarInscripcionesDemo } from '../data/inscripcionesDemo'
 
 const CLAVE = 'roca:inscripciones'
+
+const firma = (usuario) => (usuario ? {id: usuario.id, nombre: usuario.nombre } : null)
 
 function leerTodas() {
   try {
@@ -23,23 +26,32 @@ export async function obtener(id) {
     return inscripcion
 }
 
-export async function crear(datos) {
+export async function crear(datos, autor) {
   const ahora = new Date().toISOString()
-  const nueva = {...datos, id: crypto.randomUUID(), creadaEl: ahora, actualizadaEl: ahora}
+  const nueva = {...datos, id: crypto.randomUUID(), creadaEl: ahora, actualizadaEl: ahora, creadaPor: firma(autor), actualizadaPor: null,}
   guardarTodas([...leerTodas(), nueva])
   return nueva
 }
 
-export async function actualizar(id, datos) {
+export async function actualizar(id, datos, autor) {
   const inscripciones = leerTodas()
   const anterior = inscripciones.find((item) => item.id === id)
   if (!anterior) throw new Error ('No se encuentra esa inscripción')
 
-  const actualizada = {...anterior, ...datos, id, actualizadaEl: new Date().toISOString() }
+  const actualizada = {...anterior, ...datos, id, actualizadaEl: new Date().toISOString(), actualizadaPor: firma(autor) }
   guardarTodas(inscripciones.map((item) => (item.id === id ? actualizada : item)))
   return actualizada
 }
 
 export async function eliminar(id) {
   guardarTodas (leerTodas().filter((item) => item.id !== id))
+}
+
+export async function cargarDatosDemo() {
+  const reales = leerTodas().filter((item) => !item.esDemo)
+  guardarTodas([...reales, ...generarInscripcionesDemo()])
+}
+
+export async function borrarDatosDemo() {
+  guardarTodas(leerTodas().filter((item) => !item.esDemo))
 }

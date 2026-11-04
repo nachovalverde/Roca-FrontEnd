@@ -2,7 +2,7 @@ import { Row, Col, Form } from 'react-bootstrap'
 import CampoTexto from '../common/CampoTexto'
 import CampoSelect from '../common/CampoSelect'
 import CampoOpciones from '../common/CampoOpciones'
-import { GRADOS, SI_NO, TUTORES } from '../../data/opcionesFicha'
+import { GRADOS, SI_NO, TUTORES, SEXOS, CICLOS } from '../../data/opcionesFicha'
 import { calcularEdad } from '../../utils/calcularEdad'
 import { soloDigitos, soloLetras } from '../../utils/filtros'
 import SelectorLugarNacimiento from './SelectorLugarNacimiento'
@@ -31,6 +31,10 @@ function PasoAlumno({ datos, onChange, errores = {} }) {
           </Form.Group>
         </Col>
 
+        <CampoOpciones id="alumno-sexo" label="Sexo según DNI" name="sexo"
+          value={datos.sexo} onChange={onChange} opciones={SEXOS} md={6}
+          requerido error={errores.sexo} />
+
         <CampoTexto id="alumno-actaNacimiento" label="N.º de acta de nacimiento" name="actaNacimiento"
           value={datos.actaNacimiento} onChange={onChange} md={6} />
 
@@ -41,8 +45,12 @@ function PasoAlumno({ datos, onChange, errores = {} }) {
         />
 
         <CampoTexto id="alumno-domicilio" label="Domicilio" name="domicilio"
-          value={datos.domicilio} onChange={onChange} md={12}
+          value={datos.domicilio} onChange={onChange} md={6}
           requerido error={errores.domicilio} />
+
+        <CampoSelect id="alumno-cicloLectivo" label="Ciclo lectivo" name="cicloLectivo"
+          value={datos.cicloLectivo} onChange={onChange} opciones={CICLOS} md={4}
+          reqeurido error={errores.cicloLectivo} />
 
         <CampoSelect id="alumno-grado" label="Grado en el que se inscribe" name="grado"
           value={datos.grado} onChange={onChange} opciones={GRADOS} md={4}

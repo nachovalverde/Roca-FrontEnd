@@ -69,7 +69,12 @@ function DetalleInscripcion() {
         <div>
           <h1 className="h2 mb-1">{alumno.apellidoNombres}</h1>
           <p className="text-body-secondary mb-0">
-            {alumno.grado} · DNI {alumno.dni} · cargada el {formatearFecha(inscripcion.creadaEl)}
+            {alumno.grado} · Ciclo {alumno.cicloLectivo || '--'} · DNI {alumno.dni} 
+          </p>
+          <p className="small text-body-secondary mb-0">
+            Cargada por {inscripcion.creadaPor?.nombre ?? '--'} el {formatearFecha(inscripcion.creadaEl)}
+            {inscripcion.actualizadaPor && ` · Última edición: 
+            ${inscripcion.actualizadaPor.nombre}, ${formatearFecha(inscripcion.actualizadaEl)}`}
           </p>
         </div>
         <Button as={Link} to={`/inscripciones/${id}/editar`} variant="outline-primary">
