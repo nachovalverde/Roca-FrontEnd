@@ -1,9 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useReactToPrint } from 'react-to-print'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { Alert, Button, Card, Container, Spinner } from 'react-bootstrap'
 import ResumenInscripcion from '../components/inscripciones/ResumenInscripcion'
 import * as inscripcionesService from '../services/inscripcionesService'
 import { formatearFecha } from '../utils/formatearFecha'
+import FichaImprimible from '../components/inscripciones/FichaImprimible'
+import { ESTILO_FICHA_IMPRESA } from '../components/inscripciones/estiloFichaImpresa'
+
 
 function DetalleInscripcion() {
   const { id } = useParams()
@@ -13,6 +17,16 @@ function DetalleInscripcion() {
   const [inscripcion, setInscripcion] = useState(null)
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState ('')
+
+  const fichaRef = useRef(null)
+  const imprimir = useReactToPrint({
+    contentRef: fichaRef,
+    // Es el nombre que propone el navegador al guardar el PDF
+    documentTitle: inscripcion
+      ? `Ficha ${inscripcion.alumno.apellidoNombres} ${inscripcion.alumno.cicloLectivo ?? ''}`.trim()
+      : 'Ficha de inscripción',
+    pageStyle: ESTILO_FICHA_IMPRESA,
+  })
 
   //Se ejecuta al entrar y cada vez que cambia el id de la URL
 
@@ -77,9 +91,14 @@ function DetalleInscripcion() {
             ${inscripcion.actualizadaPor.nombre}, ${formatearFecha(inscripcion.actualizadaEl)}`}
           </p>
         </div>
-        <Button as={Link} to={`/inscripciones/${id}/editar`} variant="outline-primary">
-          Editar
-        </Button>
+        <div className="d-flex flex-wrap gap-2">
+          <Button variant="outline-secondary" onClick={() => imprimir()}>
+            Imprimir o guardar PDF
+          </Button>
+          <Button as={Link} to={`/inscripciones/${id}/editar`} variant="outline-primary">
+            Editar
+          </Button>
+        </div>
       </div>
 
 
@@ -88,6 +107,11 @@ function DetalleInscripcion() {
           <ResumenInscripcion datos={inscripcion} />
         </Card.Body>
       </Card>
+
+      {/* Oculta en pantalla: react-to-print copia su contenido a una ventana aparte para imprimir */}
+      <div className="d-none">
+        <FichaImprimible ref={fichaRef} inscripcion={inscripcion} />
+      </div>
 
     </Container>
   )
