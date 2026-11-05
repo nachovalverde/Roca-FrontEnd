@@ -10,6 +10,9 @@ import * as inscripcionesService from '../services/inscripcionesService'
 import { normalizarTexto } from '../utils/normalizarTexto'
 import { ciclosDisponibles } from '../utils/ciclos'
 import { paginar } from '../utils/paginar'
+import { descargarCSV, fechaDeHoy } from '../utils/exportarCSV'
+import { COLUMNAS_INSCRIPCIONES } from '../data/columnasExportacion'
+
 
 // El encabezado muestra siempre el total; lo filtrado se cuenta abajo de la tabla
 function textoCantidad(total) {
@@ -122,6 +125,12 @@ function PanelDocente() {
     await recargarLista()
   }
 
+  // Exporta todo lo filtrado (no solo la página que se ve); el nombre del archivo dice qué filtros tenía
+  const exportar = () => {
+    const nombre = `inscripciones-${filtros.ciclo || 'todos-los-ciclos'}-${filtros.grado || 'todos-los-grados'}-${fechaDeHoy()}.csv`
+    descargarCSV(nombre, COLUMNAS_INSCRIPCIONES, inscripcionesVisibles)
+  }
+
 
   let contenido
   if (cargando) {
@@ -172,9 +181,14 @@ function PanelDocente() {
               : textoCantidad(inscripciones.length)}
           </p>
         </div>
-        <Button as={Link} to="/inscripciones/nueva">
-          Nueva inscripción
-        </Button>
+        <div className="d-flex flex-wrap gap-2">
+          <Button variant="outline-primary" onClick={exportar} disabled={inscripcionesVisibles.length === 0}>
+            Exportar a Excel (CSV)
+          </Button>
+          <Button as={Link} to="/inscripciones/nueva">
+            Nueva inscripción
+          </Button>
+        </div>
       </div>
       
       {/* Solo la vice ve estos botones: sirven para probar el listado, los reportes y el tablero */}
