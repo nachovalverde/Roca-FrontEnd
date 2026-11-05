@@ -50,7 +50,7 @@ function PasoAlumno({ datos, onChange, errores = {} }) {
 
         <CampoSelect id="alumno-cicloLectivo" label="Ciclo lectivo" name="cicloLectivo"
           value={datos.cicloLectivo} onChange={onChange} opciones={CICLOS} md={4}
-          reqeurido error={errores.cicloLectivo} />
+          requerido error={errores.cicloLectivo} />
 
         <CampoSelect id="alumno-grado" label="Grado en el que se inscribe" name="grado"
           value={datos.grado} onChange={onChange} opciones={GRADOS} md={4}

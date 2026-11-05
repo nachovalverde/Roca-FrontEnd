@@ -1,7 +1,13 @@
 import axios from 'axios'
 
-// La URL sale del .env: nunca se escribe en los componentes
+
 const API_URL = import.meta.env.VITE_GEOREF_URL
+
+// Sin la variable, los pedidos irían a "undefined/provincias" dentro de la propia app y volverían vacíos sin dar error: mejor avisarlo claro en la consola
+if (!API_URL) {
+  console.error('Falta VITE_GEOREF_URL en el archivo .env. Copiá .env.example como .env y reiniciá npm run dev.')
+}
+
 const DIAS_GUARDADO = 7
 const UN_DIA = 24 * 60 * 60 * 1000
 
@@ -28,6 +34,9 @@ function guardar(clave, datos) {
 
 // Un mensaje que explique qué pasó, en vez del error técnico de axios
 function mensajeDeError(error) {
+  if (error.respuestaInvalida) {
+    return 'El servicio de provincias no respondió bien. Mientras tanto, podés escribir el lugar a mano.'
+  }
   if (error.response?.status === 429) {
     return 'El servicio del Gobierno recibió demasiadas consultas. Esperá unos minutos o escribí el lugar a mano.'
   }
@@ -36,6 +45,18 @@ function mensajeDeError(error) {
   }
   return 'El servicio de provincias no respondió bien. Mientras tanto, podés escribir el lugar a mano.'
 }
+
+// Si la respuesta no trae la lista esperada, se trata como un error: así salta el aviso y el formulario pasa a los campos de texto, en vez de mostrar un select vacío
+function exigirLista(lista) {
+  if (!Array.isArray(lista)) {
+    const error = new Error('La respuesta de Georef no trae la lista esperada')
+    error.respuestaInvalida = true
+    throw error
+  }
+  return lista
+}
+
+
 
 // Provincias y localidades casi no cambian: se guardan 7 días en el navegador y se piden una sola vez
 function pedirConGuardado(clave, pedir) {
@@ -64,7 +85,7 @@ export async function listarProvincias() {
       params: { campos: 'id,nombre', orden: 'nombre', max: 30 },
       timeout: 8000,
     })
-    return response.data.provincias
+    return exigirLista(response.data?.provincias)
   })
 }
 
@@ -75,6 +96,6 @@ export async function listarLocalidades(provinciaId) {
       params: { provincia: provinciaId, campos: 'id,nombre', orden: 'nombre', max: 1000 },
       timeout: 8000,
     })
-    return [...new Set(response.data.localidades.map((localidad) => localidad.nombre))]
+    return [...new Set(exigirLista(response.data?.localidades).map((localidad) => localidad.nombre))]
   })
 }
