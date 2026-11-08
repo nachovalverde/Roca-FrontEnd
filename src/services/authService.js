@@ -1,48 +1,42 @@
-import usuariosIniciales from '../data/usuarios'
+import {
+    buscarConPassword,
+    registrarUltimoAcceso,
+} from './usuariosService'
 
-const CLAVE_USUARIOS = 'roca_usuarios'
 const CLAVE_SESION = 'roca_sesion'
 
-function obtenerUsuarios() {
-  const usuariosGuardados = localStorage.getItem(CLAVE_USUARIOS)
+export async function iniciarSesion(usuarioOMail, password) {
+    const usuario = await buscarConPassword(usuarioOMail)
 
-  if (usuariosGuardados) {
-    return JSON.parse(usuariosGuardados)
-  }
+    if (!usuario || usuario.password !== password) {
+        throw new Error('Usuario o contraseña incorrectos.')
+    }
 
-  localStorage.setItem(CLAVE_USUARIOS, JSON.stringify(usuariosIniciales))
-  return usuariosIniciales
-}
+    if (!usuario.activo) {
+        throw new Error(
+            'Tu cuenta está desactivada. Consultá con la vicedirección.'
+        )
+    }
 
-export function iniciarSesion(nombreUsuario, password) {
-  const usuarioEncontrado = obtenerUsuarios().find(
-    (usuario) =>
-      usuario.usuario === nombreUsuario &&
-      usuario.password === password &&
-      usuario.activo
-  )
+    await registrarUltimoAcceso(usuario.id)
 
-  if (!usuarioEncontrado) {
-    throw new Error('Usuario o contraseña incorrectos.')
-  }
+    const sesion = {
+        id: usuario.id,
+        nombre: usuario.nombre,
+        usuario: usuario.usuario,
+        rol: usuario.rol,
+        grado: usuario.grado,
+    }
 
-  const sesion = {
-    id: usuarioEncontrado.id,
-    nombre: usuarioEncontrado.nombre,
-    usuario: usuarioEncontrado.usuario,
-    rol: usuarioEncontrado.rol,
-    grado: usuarioEncontrado.grado,
-  }
-
-  localStorage.setItem(CLAVE_SESION, JSON.stringify(sesion))
-  return sesion
+    localStorage.setItem(CLAVE_SESION, JSON.stringify(sesion))
+    return sesion
 }
 
 export function obtenerSesion() {
-  const sesionGuardada = localStorage.getItem(CLAVE_SESION)
-  return sesionGuardada ? JSON.parse(sesionGuardada) : null
+    const sesionGuardada = localStorage.getItem(CLAVE_SESION)
+    return sesionGuardada ? JSON.parse(sesionGuardada) : null
 }
 
-export function cerrarSesion() {
-  localStorage.removeItem(CLAVE_SESION)
+export async function cerrarSesion() {
+    localStorage.removeItem(CLAVE_SESION)
 }

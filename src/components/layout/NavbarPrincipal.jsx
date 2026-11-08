@@ -20,7 +20,7 @@ function NavbarPrincipal() {
         })
 
         if (resultado.isConfirmed) {
-            logout()
+            await logout()
             navigate('/', { replace: true })
         }
     }

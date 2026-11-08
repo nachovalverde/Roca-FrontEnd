@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Alert, Button, Card, Container, Form } from 'react-bootstrap'
-import { useAuth } from '../context/AuthContext'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import { RUTA_POR_ROL } from '../data/roles'
 
 function Login() {
@@ -13,20 +13,26 @@ function Login() {
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [mensaje, setMensaje] = useState('')
+    const [enviando, setEnviando] = useState(false)
 
-    function manejarEnvio(evento) {
+    async function manejarEnvio(evento) {
         evento.preventDefault()
         setError('')
         setMensaje('')
+        setEnviando(true)
 
         try {
-            const usuarioAutenticado = login(nombreUsuario, password)
+            const usuarioAutenticado = await login(nombreUsuario, password)
+            const destino =
+                location.state?.desde ??
+                RUTA_POR_ROL[usuarioAutenticado.rol] ??
+                '/'
 
-            // Si venía de una página protegida vuelve ahí; si no, va al panel de su rol
-            const destino = location.state?.desde ?? RUTA_POR_ROL[usuarioAutenticado.rol] ?? '/'
             navigate(destino, { replace: true })
         } catch (errorLogin) {
             setError(errorLogin.message)
+        } finally {
+            setEnviando(false)
         }
     }
 
@@ -44,12 +50,14 @@ function Login() {
 
                     <Form onSubmit={manejarEnvio}>
                         <Form.Group className="mb-3" controlId="nombreUsuario">
-                            <Form.Label>Usuario</Form.Label>
+                            <Form.Label>Usuario o mail</Form.Label>
                             <Form.Control
                                 type="text"
                                 autoComplete="username"
                                 value={nombreUsuario}
-                                onChange={(evento) => setNombreUsuario(evento.target.value)}
+                                onChange={(evento) =>
+                                    setNombreUsuario(evento.target.value)
+                                }
                                 required
                             />
                         </Form.Group>
@@ -60,13 +68,20 @@ function Login() {
                                 type="password"
                                 autoComplete="current-password"
                                 value={password}
-                                onChange={(evento) => setPassword(evento.target.value)}
+                                onChange={(evento) =>
+                                    setPassword(evento.target.value)
+                                }
                                 required
                             />
                         </Form.Group>
 
-                        <Button type="submit" variant="primary" className="w-100">
-                            Iniciar sesión
+                        <Button
+                            type="submit"
+                            variant="primary"
+                            className="w-100"
+                            disabled={enviando}
+                        >
+                            {enviando ? 'Ingresando…' : 'Iniciar sesión'}
                         </Button>
                     </Form>
                 </Card.Body>

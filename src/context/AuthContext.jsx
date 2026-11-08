@@ -16,14 +16,17 @@ export function AuthProvider({ children }) {
     setCargando(false)
   }, [])
 
-  function login(nombreUsuario, password) {
-    const usuarioAutenticado = iniciarSesionService(nombreUsuario, password)
+  async function login(usuarioOMail, password) {
+    const usuarioAutenticado = await iniciarSesionService(
+        usuarioOMail,
+        password
+    )
     setUsuario(usuarioAutenticado)
     return usuarioAutenticado
   }
 
-  function logout() {
-    cerrarSesionService()
+  async function logout() {
+    await cerrarSesionService()
     setUsuario(null)
   }
 
