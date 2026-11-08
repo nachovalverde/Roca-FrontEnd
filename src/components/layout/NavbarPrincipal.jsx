@@ -1,7 +1,7 @@
 import { Button, Container, Image, Nav, Navbar } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
-import { useAuth } from '../../context/AuthContext'
+import { useAuth } from '../../context/useAuth'
 import { NOMBRE_ROL, RUTA_POR_ROL } from '../../data/roles'
 import logoEscuela from '../../assets/LogoEscuelaRoca2.jpeg'
 

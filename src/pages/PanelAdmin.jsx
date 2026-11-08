@@ -1,54 +1,58 @@
-import { Link } from "react-router-dom";
-import { Card, Col, Container, Row } from "react-bootstrap";
+import { Link } from 'react-router-dom'
+import { Card, Col, Container, Row } from 'react-bootstrap'
 
 const ACCESOS_ADMIN = [
-  {
-    titulo: "Inscripciones",
-    texto: "Consultar, filtrar y cargar fichas de inscripción.",
-    ruta: "/docente",
-  },
-  {
-    titulo: "Estadísticas",
-    texto:
-      "Inscriptos por grado y sexo, evolución de la carga y comparativa entre años.",
-    ruta: "/admin/estadisticas",
-  },
-];
+    {
+        titulo: 'Inscripciones',
+        texto: 'Consultar, filtrar y cargar fichas de inscripción.',
+        ruta: '/docente',
+    },
+    {
+        titulo: 'Estadísticas',
+        texto: 'Inscriptos por grado y sexo, evolución de la carga y comparativa entre años.',
+        ruta: '/admin/estadisticas',
+    },
+    {
+        titulo: 'Usuarios',
+        texto: 'Altas, bajas y cambios de cuentas, y control de accesos.',
+        ruta: '/admin/usuarios',
+    },
+]
 
 function PanelAdmin() {
-  return (
-    <Container className="py-5">
-      <title>Panel de administración · Escuela Roca</title>
-      <meta name="robots" content="noindex" />
+    return (
+        <Container className="py-5">
+            <title>Panel de administración · Escuela Roca</title>
+            <meta name="robots" content="noindex" />
 
-      <h1>Panel de administración</h1>
-      <p className="text-secondary">
-        Desde acá la vicedirectora accede a las herramientas de administración
-        de la escuela.
-      </p>
+            <h1>Panel de administración</h1>
+            <p className="text-secondary">
+                Desde acá la vicedirectora accede a las herramientas de administración
+                de la escuela.
+            </p>
 
-      <Row className="g-3 mt-2">
-        {ACCESOS_ADMIN.map((acceso) => (
-          <Col md={4} key={acceso.ruta}>
-            <Card
-              as={Link}
-              to={acceso.ruta}
-              className="h-100 text-decoration-none"
-            >
-              <Card.Body>
-                <Card.Title as="h2" className="h5">
-                  {acceso.titulo}
-                </Card.Title>
-                <Card.Text className="text-body-secondary">
-                  {acceso.texto}
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
-    </Container>
-  );
+            <Row className="g-3 mt-2">
+                {ACCESOS_ADMIN.map((acceso) => (
+                    <Col md={4} key={acceso.ruta}>
+                        <Card
+                            as={Link}
+                            to={acceso.ruta}
+                            className="h-100 text-decoration-none"
+                        >
+                            <Card.Body>
+                                <Card.Title as="h2" className="h5">
+                                    {acceso.titulo}
+                                </Card.Title>
+                                <Card.Text className="text-body-secondary">
+                                    {acceso.texto}
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                ))}
+            </Row>
+        </Container>
+    )
 }
 
-export default PanelAdmin;
+export default PanelAdmin

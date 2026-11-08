@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Alert, Container, Spinner } from 'react-bootstrap'
 import FormularioInscripcion from '../components/inscripciones/FormularioInscripcion'
 import * as inscripcionesService from '../services/inscripcionesService'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/useAuth'
 
 function EditarInscripcion() {
   const { id } = useParams()

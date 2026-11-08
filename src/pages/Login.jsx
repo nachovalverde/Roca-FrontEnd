@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Alert, Button, Card, Container, Form } from 'react-bootstrap'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/useAuth'
 import { RUTA_POR_ROL } from '../data/roles'
 
 function Login() {
