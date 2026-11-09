@@ -1,5 +1,19 @@
 const mailValido = (mail) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)
 
+export function validarPassword(password, repetirPassword) {
+    const errores = {}
+    const clave = password ?? ''
+    const repeticion = repetirPassword ?? ''
+
+    if (clave.length < 6) {
+        errores.password = 'La contraseña debe tener al menos 6 caracteres'
+    } else if (clave !== repeticion) {
+        errores.repetirPassword = 'Las contraseñas no coinciden'
+    }
+
+    return errores
+}
+
 export function validarUsuario(datos, esNuevo) {
     const errores = {}
     const nombre = datos.nombre ?? ''
@@ -29,13 +43,12 @@ export function validarUsuario(datos, esNuevo) {
         errores.grado = 'Elegí el grado a cargo'
     }
 
-    // Al editar, si la contraseña queda vacía, se conserva la anterior.
+    // Al editar, la contraseña es opcional; si se completa, se valida.
     if (esNuevo || password || repetirPassword) {
-        if (password.length < 6) {
-            errores.password = 'La contraseña debe tener al menos 6 caracteres'
-        } else if (password !== repetirPassword) {
-            errores.repetirPassword = 'Las contraseñas no coinciden'
-        }
+        Object.assign(
+            errores,
+            validarPassword(password, repetirPassword)
+        )
     }
 
     return errores

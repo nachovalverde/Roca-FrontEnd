@@ -14,6 +14,7 @@ import NuevaInscripcion from '../pages/NuevaInscripcion'
 import DetalleInscripcion from '../pages/DetalleInscripcion'
 import { ROLES_INSCRIPCIONES } from '../data/roles'
 import EditarInscripcion from '../pages/EditarInscripcion'
+import RecuperarContrasena from '../pages/RecuperarContrasena'
 
 const EstadisticasInscripciones = lazy(() =>
     import('../pages/EstadisticasInscripciones')
@@ -49,6 +50,7 @@ function AppRouter() {
                     <Route path="/noticias/:id" element={<NoticiasDetalle />} />
                     <Route path="/institucional" element={<Institucional />} />
                     <Route path="/login" element={<Login />} />
+                    <Route path="/recuperar" element={<RecuperarContrasena />} />
 
                     <Route
                         path="/admin"
