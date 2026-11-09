@@ -1,11 +1,14 @@
 import { Button, ButtonGroup } from 'react-bootstrap'
+import { CATEGORIAS_NOTICIAS } from '../../data/categoriasNoticias'
 
-
-const categorias = ['Todas', 'Comunicados', 'Actividades', 'Novedades']
+const categorias = ['Todas', ...CATEGORIAS_NOTICIAS]
 
 function FiltroCategorias({ activa, onCambiar }) {
     return (
-        <ButtonGroup className="flex-wrap" aria-label="Filtrar novedades por categoria">
+        <ButtonGroup
+            className="flex-wrap"
+            aria-label="Filtrar novedades por categoría"
+        >
             {categorias.map((categoria) => (
                 <Button
                     key={categoria}
