@@ -5,7 +5,7 @@ import FormularioInscripcion from '../components/inscripciones/FormularioInscrip
 import { inscripcionVacia } from '../data/inscripcionVacia'
 import * as inscripcionesService from '../services/inscripcionesService'
 import { borrarBorrador, guardarBorrador, leerBorrador } from '../services/borradorService'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/useAuth'
 
 // '2026-10-15T14:30:00Z' → '15/10, 11:30'
 function formatearMomento(fechaISO) {

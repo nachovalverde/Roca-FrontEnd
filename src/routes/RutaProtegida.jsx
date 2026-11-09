@@ -1,24 +1,18 @@
-import { Container, Spinner } from 'react-bootstrap'
 import { Navigate, useLocation } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/useAuth'
 
 function RutaProtegida({ rol, children }) {
-    const { usuario, cargando } = useAuth()
+    const { usuario } = useAuth()
     const location = useLocation()
 
-    if (cargando) {
-        return (
-            <Container className="py-5 text-center">
-                <Spinner animation="border" role="status">
-                    <span className="visually-hidden">Verificando sesión...</span>
-                </Spinner>
-            </Container>
-        )
-    }
-
     if (!usuario) {
-        
-        return <Navigate to="/login" replace state={{ desde: location.pathname }} />
+        return (
+            <Navigate
+                to="/login"
+                replace
+                state={{ desde: location.pathname }}
+            />
+        )
     }
 
     const rolesPermitidos = Array.isArray(rol) ? rol : [rol]

@@ -7,6 +7,7 @@ import NoticiasDetalle from '../pages/NoticiasDetalle'
 import Institucional from '../pages/Institucional'
 import Login from '../pages/Login'
 import PanelAdmin from '../pages/PanelAdmin'
+import GestionUsuarios from '../pages/GestionUsuarios'
 import RutaProtegida from './RutaProtegida'
 import PanelDocente from '../pages/PanelDocente'
 import NuevaInscripcion from '../pages/NuevaInscripcion'
@@ -14,9 +15,9 @@ import DetalleInscripcion from '../pages/DetalleInscripcion'
 import { ROLES_INSCRIPCIONES } from '../data/roles'
 import EditarInscripcion from '../pages/EditarInscripcion'
 
-// Carga diferida: el tablero usa Recharts, que es pesado. Así se descarga solo cuando
-// la vice entra a las estadísticas, y no lo bajan las maestras desde el celular.
-const EstadisticasInscripciones = lazy(() => import('../pages/EstadisticasInscripciones'))
+const EstadisticasInscripciones = lazy(() =>
+    import('../pages/EstadisticasInscripciones')
+)
 
 function Cargando() {
     return (
@@ -48,14 +49,68 @@ function AppRouter() {
                     <Route path="/noticias/:id" element={<NoticiasDetalle />} />
                     <Route path="/institucional" element={<Institucional />} />
                     <Route path="/login" element={<Login />} />
-                    <Route path="*" element={<NotFound />} />
-                    <Route path="/admin" element={<RutaProtegida rol="vicedirectora"><PanelAdmin /></RutaProtegida>} />
-                    <Route path="/admin/estadisticas" element={<RutaProtegida rol="vicedirectora"><Suspense fallback={<Cargando />}><EstadisticasInscripciones /></Suspense></RutaProtegida>} />
-                    <Route path="/docente" element={<RutaProtegida rol={ROLES_INSCRIPCIONES}><PanelDocente /></RutaProtegida>} />
-                    <Route path="/inscripciones/nueva" element={<RutaProtegida rol={ROLES_INSCRIPCIONES}><NuevaInscripcion /></RutaProtegida>} />
-                    <Route path="/inscripciones/:id" element={<RutaProtegida rol={ROLES_INSCRIPCIONES}><DetalleInscripcion /></RutaProtegida>} />
-                    <Route path="/inscripciones/:id/editar" element={<RutaProtegida rol={ROLES_INSCRIPCIONES}><EditarInscripcion /></RutaProtegida>} />
 
+                    <Route
+                        path="/admin"
+                        element={
+                            <RutaProtegida rol="vicedirectora">
+                                <PanelAdmin />
+                            </RutaProtegida>
+                        }
+                    />
+                    <Route
+                        path="/admin/usuarios"
+                        element={
+                            <RutaProtegida rol="vicedirectora">
+                                <GestionUsuarios />
+                            </RutaProtegida>
+                        }
+                    />
+                    <Route
+                        path="/admin/estadisticas"
+                        element={
+                            <RutaProtegida rol="vicedirectora">
+                                <Suspense fallback={<Cargando />}>
+                                    <EstadisticasInscripciones />
+                                </Suspense>
+                            </RutaProtegida>
+                        }
+                    />
+
+                    <Route
+                        path="/docente"
+                        element={
+                            <RutaProtegida rol={ROLES_INSCRIPCIONES}>
+                                <PanelDocente />
+                            </RutaProtegida>
+                        }
+                    />
+                    <Route
+                        path="/inscripciones/nueva"
+                        element={
+                            <RutaProtegida rol={ROLES_INSCRIPCIONES}>
+                                <NuevaInscripcion />
+                            </RutaProtegida>
+                        }
+                    />
+                    <Route
+                        path="/inscripciones/:id"
+                        element={
+                            <RutaProtegida rol={ROLES_INSCRIPCIONES}>
+                                <DetalleInscripcion />
+                            </RutaProtegida>
+                        }
+                    />
+                    <Route
+                        path="/inscripciones/:id/editar"
+                        element={
+                            <RutaProtegida rol={ROLES_INSCRIPCIONES}>
+                                <EditarInscripcion />
+                            </RutaProtegida>
+                        }
+                    />
+
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </Layout>
         </BrowserRouter>
