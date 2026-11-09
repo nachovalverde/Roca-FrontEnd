@@ -17,6 +17,11 @@ const ACCESOS_ADMIN = [
         texto: 'Altas, bajas y cambios de cuentas, y control de accesos.',
         ruta: '/admin/usuarios',
     },
+    {
+        titulo: 'Noticias',
+        texto: 'Publicar, editar y ordenar las novedades del inicio.',
+        ruta: '/admin/noticias',
+    },
 ]
 
 function PanelAdmin() {

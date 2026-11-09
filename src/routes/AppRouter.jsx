@@ -15,6 +15,7 @@ import DetalleInscripcion from '../pages/DetalleInscripcion'
 import { ROLES_INSCRIPCIONES } from '../data/roles'
 import EditarInscripcion from '../pages/EditarInscripcion'
 import RecuperarContrasena from '../pages/RecuperarContrasena'
+import GestionNoticias from '../pages/GestionNoticias'
 
 const EstadisticasInscripciones = lazy(() =>
     import('../pages/EstadisticasInscripciones')
@@ -57,6 +58,14 @@ function AppRouter() {
                         element={
                             <RutaProtegida rol="vicedirectora">
                                 <PanelAdmin />
+                            </RutaProtegida>
+                        }
+                    />
+                    <Route
+                        path="/admin/noticias"
+                        element={
+                            <RutaProtegida rol="vicedirectora">
+                                <GestionNoticias />
                             </RutaProtegida>
                         }
                     />

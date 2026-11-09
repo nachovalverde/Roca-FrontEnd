@@ -1,12 +1,13 @@
 import { Button, Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import fachada from '../../assets/Fachada.jpeg'
 
 function NoticiaCard({ noticia }) {
     return (
         <Card as="article" className="h-100 shadow-sm">
             <Card.Img
                 variant="top"
-                src={noticia.imagen}
+                src={noticia.imagen || fachada}
                 alt={noticia.titulo}
                 style={{ height: '220px', objectFit: 'cover' }}
             />

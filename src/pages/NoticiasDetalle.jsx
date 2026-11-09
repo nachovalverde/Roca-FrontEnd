@@ -1,23 +1,93 @@
-import { Alert, Button, Container, Image } from 'react-bootstrap'
+import { useEffect, useState } from 'react'
+import {
+    Alert,
+    Button,
+    Container,
+    Image,
+    Spinner,
+} from 'react-bootstrap'
 import { Link, useParams } from 'react-router-dom'
-import noticias from '../data/noticias'
+import fachada from '../assets/Fachada.jpeg'
+import { obtenerPublicada } from '../services/noticiasService'
+import { formatearFecha } from '../utils/formatearFecha'
 
 function NoticiasDetalle() {
     const { id } = useParams()
-    const noticia = noticias.find((item) => String(item.id) === id)
 
-    if (!noticia) {
+    const [resultado, setResultado] = useState(() => ({
+        id,
+        noticia: null,
+        error: '',
+        cargando: true,
+    }))
+
+    useEffect(() => {
+        let vigente = true
+
+        obtenerPublicada(id)
+            .then((noticia) => {
+                if (vigente) {
+                    setResultado({
+                        id,
+                        noticia,
+                        error: '',
+                        cargando: false,
+                    })
+                }
+            })
+            .catch((errorCarga) => {
+                if (vigente) {
+                    setResultado({
+                        id,
+                        noticia: null,
+                        error: errorCarga.message,
+                        cargando: false,
+                    })
+                }
+            })
+
+        return () => {
+            vigente = false
+        }
+    }, [id])
+
+    const resultadoActual = resultado.id === id
+    const cargando = !resultadoActual || resultado.cargando
+    const noticia = resultadoActual ? resultado.noticia : null
+    const error = resultadoActual ? resultado.error : ''
+
+    if (cargando) {
+        return (
+            <Container className="py-5 text-center">
+                <Spinner animation="border" role="status">
+                    <span className="visually-hidden">
+                        Cargando noticia
+                    </span>
+                </Spinner>
+            </Container>
+        )
+    }
+
+    if (error || !noticia) {
         return (
             <Container className="py-5">
                 <title>Noticia no encontrada · Escuela Roca</title>
                 <meta name="robots" content="noindex" />
-                <Alert variant="warning">No encontramos esa noticia.</Alert>
+
+                <Alert variant="warning">
+                    {error || 'No encontramos esa noticia.'}
+                </Alert>
+
                 <Button as={Link} to="/" variant="primary">
                     Volver al inicio
                 </Button>
             </Container>
         )
     }
+
+    const parrafos = String(noticia.contenido ?? '')
+        .split(/\r?\n/)
+        .filter((parrafo) => parrafo.trim())
 
     return (
         <Container className="py-5">
@@ -29,11 +99,14 @@ function NoticiasDetalle() {
             </Button>
 
             <article>
-                <p className="text-primary fw-semibold">{noticia.categoria}</p>
                 <h1>{noticia.titulo}</h1>
 
+                <p className="text-body-secondary">
+                    {formatearFecha(noticia.fecha)} · {noticia.categoria}
+                </p>
+
                 <Image
-                    src={noticia.imagen}
+                    src={noticia.imagen || fachada}
                     alt={noticia.titulo}
                     fluid
                     rounded
@@ -41,6 +114,10 @@ function NoticiasDetalle() {
                 />
 
                 <p className="text-secondary">{noticia.descripcion}</p>
+
+                {parrafos.map((parrafo, indice) => (
+                    <p key={`${noticia.id}-${indice}`}>{parrafo}</p>
+                ))}
             </article>
         </Container>
     )
