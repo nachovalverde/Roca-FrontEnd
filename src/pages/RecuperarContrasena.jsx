@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Alert, Button, Card, Container, Form } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
-import Swal from 'sweetalert2'
+import { Alerta } from '../utils/alertas'
 import { validarPassword } from '../utils/validarUsuario'
 import {
     restablecer,
@@ -33,7 +33,7 @@ function RecuperarContrasena() {
                 ? `En una versión con servidor, el código se enviaría a ${resultado.mailOculto}. Para probar esta demo, tu código es: ${resultado.codigoDemo}.`
                 : 'Si la cuenta existe y está activa, recibirás instrucciones para restablecer tu contraseña.'
 
-            await Swal.fire({
+            await Alerta.fire({
                 icon: 'info',
                 title: 'Solicitud procesada',
                 text: mensaje,
@@ -63,7 +63,7 @@ function RecuperarContrasena() {
         try {
             await restablecer(usuarioOMail.trim(), codigo, nuevaPassword)
 
-            await Swal.fire({
+            await Alerta.fire({
                 icon: 'success',
                 title: 'Contraseña actualizada',
                 text: 'Ya podés ingresar con tu nueva contraseña.',

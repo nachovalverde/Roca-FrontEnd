@@ -3,6 +3,7 @@ import {
     EVENTOS,
     registrar as registrarAcceso,
 } from './registroAccesosService'
+import { guardarEnNavegador } from '../utils/almacenamiento'
 
 const CLAVE = 'roca_usuarios'
 
@@ -15,12 +16,12 @@ function leerTodos() {
         // Si el dato guardado está dañado, se inicializa con los usuarios de prueba.
     }
 
-    localStorage.setItem(CLAVE, JSON.stringify(usuariosIniciales))
+    guardarEnNavegador(CLAVE, JSON.stringify(usuariosIniciales))
     return usuariosIniciales
 }
 
 function guardarTodos(usuarios) {
-    localStorage.setItem(CLAVE, JSON.stringify(usuarios))
+    guardarEnNavegador(CLAVE, JSON.stringify(usuarios))
 }
 
 // Las páginas reciben la información del usuario sin su contraseña.

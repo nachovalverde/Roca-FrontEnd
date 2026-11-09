@@ -5,7 +5,11 @@ import {
     Row,
     Spinner,
 } from 'react-bootstrap'
-import Swal from 'sweetalert2'
+import {
+    Alerta,
+    mostrarError,
+    mostrarExito,
+} from '../utils/alertas'
 import CampoSelect from '../components/common/CampoSelect'
 import Paginacion from '../components/common/Paginacion'
 import FormularioNoticia from '../components/admin/FormularioNoticia'
@@ -36,12 +40,7 @@ function GestionNoticias() {
         listar()
             .then(setNoticias)
             .catch((error) => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'No se pudieron cargar las noticias',
-                    text: error.message,
-                    confirmButtonText: 'Entendido',
-                })
+                mostrarError(error, 'No se pudieron cargar las noticias')
             })
             .finally(() => setCargando(false))
     }, [])
@@ -88,19 +87,11 @@ function GestionNoticias() {
             await recargarNoticias()
             cerrarFormulario()
 
-            await Swal.fire({
-                icon: 'success',
-                title: esEdicion ? 'Noticia actualizada' : 'Noticia creada',
-                timer: 1600,
-                showConfirmButton: false,
-            })
+            await mostrarExito(
+                esEdicion ? 'Noticia actualizada' : 'Noticia creada'
+            )
         } catch (error) {
-            await Swal.fire({
-                icon: 'error',
-                title: 'No se pudo guardar la noticia',
-                text: error.message,
-                confirmButtonText: 'Entendido',
-            })
+            await mostrarError(error, 'No se pudo guardar la noticia')
         }
     }
 
@@ -109,19 +100,11 @@ function GestionNoticias() {
             await cambiarPublicacionServicio(id, publicada)
             await recargarNoticias()
 
-            await Swal.fire({
-                icon: 'success',
-                title: publicada ? 'Noticia publicada' : 'Noticia despublicada',
-                timer: 1600,
-                showConfirmButton: false,
-            })
+            await mostrarExito(
+                publicada ? 'Noticia publicada' : 'Noticia despublicada'
+            )
         } catch (error) {
-            await Swal.fire({
-                icon: 'error',
-                title: 'No se pudo cambiar la publicación',
-                text: error.message,
-                confirmButtonText: 'Entendido',
-            })
+            await mostrarError(error, 'No se pudo cambiar la publicación')
         }
     }
 
@@ -129,7 +112,7 @@ function GestionNoticias() {
         const noticia = noticias.find((item) => item.id === id)
         if (!noticia) return
 
-        const confirmacion = await Swal.fire({
+        const confirmacion = await Alerta.fire({
             icon: 'warning',
             title: '¿Eliminar esta noticia?',
             text: `Se eliminará “${noticia.titulo}”. Esta acción no se puede deshacer.`,
@@ -143,20 +126,9 @@ function GestionNoticias() {
         try {
             await eliminarServicio(id)
             await recargarNoticias()
-
-            await Swal.fire({
-                icon: 'success',
-                title: 'Noticia eliminada',
-                timer: 1600,
-                showConfirmButton: false,
-            })
+            await mostrarExito('Noticia eliminada')
         } catch (error) {
-            await Swal.fire({
-                icon: 'error',
-                title: 'No se pudo eliminar la noticia',
-                text: error.message,
-                confirmButtonText: 'Entendido',
-            })
+            await mostrarError(error, 'No se pudo eliminar la noticia')
         }
     }
 

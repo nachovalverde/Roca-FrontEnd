@@ -8,7 +8,11 @@ import {
     Tab,
     Tabs,
 } from 'react-bootstrap'
-import Swal from 'sweetalert2'
+import {
+    Alerta,
+    mostrarError,
+    mostrarExito,
+} from '../utils/alertas'
 import CampoSelect from '../components/common/CampoSelect'
 import CampoTexto from '../components/common/CampoTexto'
 import FormularioUsuario from '../components/admin/FormularioUsuario'
@@ -89,12 +93,7 @@ function GestionUsuarios() {
                 setRegistro(listaRegistro)
             })
             .catch((error) => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'No se pudieron cargar los datos',
-                    text: error.message,
-                    confirmButtonText: 'Entendido',
-                })
+                mostrarError(error, 'No se pudieron cargar los datos')
             })
             .finally(() => setCargando(false))
     }, [])
@@ -205,19 +204,11 @@ function GestionUsuarios() {
             await recargarDatos()
             cerrarFormulario()
 
-            await Swal.fire({
-                icon: 'success',
-                title: esEdicion ? 'Cuenta actualizada' : 'Cuenta creada',
-                timer: 1600,
-                showConfirmButton: false,
-            })
+            await mostrarExito(
+                esEdicion ? 'Cuenta actualizada' : 'Cuenta creada'
+            )
         } catch (error) {
-            await Swal.fire({
-                icon: 'error',
-                title: 'No se pudo guardar la cuenta',
-                text: error.message,
-                confirmButtonText: 'Entendido',
-            })
+            await mostrarError(error, 'No se pudo guardar la cuenta')
         }
     }
 
@@ -226,7 +217,7 @@ function GestionUsuarios() {
         if (!cuenta) return
 
         if (!activo) {
-            const resultado = await Swal.fire({
+            const resultado = await Alerta.fire({
                 icon: 'warning',
                 title: '¿Desactivar esta cuenta?',
                 text: `${cuenta.nombre} ya no podrá ingresar al sistema.`,
@@ -242,19 +233,11 @@ function GestionUsuarios() {
             await cambiarEstadoServicio(id, activo, usuarioActual)
             await recargarDatos()
 
-            await Swal.fire({
-                icon: 'success',
-                title: activo ? 'Cuenta reactivada' : 'Cuenta desactivada',
-                timer: 1600,
-                showConfirmButton: false,
-            })
+            await mostrarExito(
+                activo ? 'Cuenta reactivada' : 'Cuenta desactivada'
+            )
         } catch (error) {
-            await Swal.fire({
-                icon: 'error',
-                title: 'No se pudo cambiar el estado',
-                text: error.message,
-                confirmButtonText: 'Entendido',
-            })
+            await mostrarError(error, 'No se pudo cambiar el estado')
         }
     }
 
