@@ -2,6 +2,10 @@ import {
     buscarConPassword,
     registrarUltimoAcceso,
 } from './usuariosService'
+import {
+    EVENTOS,
+    registrar as registrarAcceso,
+} from './registroAccesosService'
 
 const CLAVE_SESION = 'roca_sesion'
 
@@ -9,10 +13,23 @@ export async function iniciarSesion(usuarioOMail, password) {
     const usuario = await buscarConPassword(usuarioOMail)
 
     if (!usuario || usuario.password !== password) {
+        await registrarAcceso({
+            evento: EVENTOS.INGRESO_FALLIDO,
+            usuario,
+            nombreIngresado: usuarioOMail,
+            detalle: usuario ? 'Contraseña incorrecta' : 'Usuario inexistente',
+        })
+
         throw new Error('Usuario o contraseña incorrectos.')
     }
 
     if (!usuario.activo) {
+        await registrarAcceso({
+            evento: EVENTOS.INGRESO_FALLIDO,
+            usuario,
+            detalle: 'Cuenta desactivada',
+        })
+
         throw new Error(
             'Tu cuenta está desactivada. Consultá con la vicedirección.'
         )
@@ -29,6 +46,12 @@ export async function iniciarSesion(usuarioOMail, password) {
     }
 
     localStorage.setItem(CLAVE_SESION, JSON.stringify(sesion))
+
+    await registrarAcceso({
+        evento: EVENTOS.INGRESO,
+        usuario,
+    })
+
     return sesion
 }
 
@@ -38,5 +61,13 @@ export function obtenerSesion() {
 }
 
 export async function cerrarSesion() {
+    const sesion = obtenerSesion()
     localStorage.removeItem(CLAVE_SESION)
+
+    if (sesion) {
+        await registrarAcceso({
+            evento: EVENTOS.SALIDA,
+            usuario: sesion,
+        })
+    }
 }

@@ -94,9 +94,9 @@ function GestionUsuarios() {
 
         try {
             if (esEdicion) {
-                await actualizar(usuarioEditando.id, datos)
+                await actualizar(usuarioEditando.id, datos, usuarioActual)
             } else {
-                await crear(datos)
+                await crear(datos, usuarioActual)
             }
 
             await recargarUsuarios()

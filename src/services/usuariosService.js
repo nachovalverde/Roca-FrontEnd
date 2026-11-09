@@ -1,4 +1,8 @@
 import usuariosIniciales from '../data/usuarios'
+import {
+    EVENTOS,
+    registrar as registrarAcceso,
+} from './registroAccesosService'
 
 const CLAVE = 'roca_usuarios'
 
@@ -57,7 +61,7 @@ export async function buscarConPassword(usuarioOMail) {
     )
 }
 
-export async function crear(datos) {
+export async function crear(datos, quienLoHace) {
     const usuarios = leerTodos()
     validarUnicos(usuarios, datos)
 
@@ -71,10 +75,17 @@ export async function crear(datos) {
     }
 
     guardarTodos([...usuarios, nuevo])
+
+    await registrarAcceso({
+        evento: EVENTOS.USUARIO_CREADO,
+        usuario: quienLoHace,
+        detalle: `Creó la cuenta ${nuevo.usuario}`,
+    })
+
     return sinPassword(nuevo)
 }
 
-export async function actualizar(id, datos) {
+export async function actualizar(id, datos, quienLoHace) {
     const usuarios = leerTodos()
     const anterior = usuarios.find((usuario) => usuario.id === id)
 
@@ -94,6 +105,14 @@ export async function actualizar(id, datos) {
     guardarTodos(
         usuarios.map((usuario) => (usuario.id === id ? actualizado : usuario))
     )
+
+    const detallePassword = datos.password ? ' y su contraseña' : ''
+
+    await registrarAcceso({
+        evento: EVENTOS.USUARIO_EDITADO,
+        usuario: quienLoHace,
+        detalle: `Modificó la cuenta ${actualizado.usuario}${detallePassword}`,
+    })
 
     return sinPassword(actualizado)
 }
@@ -119,7 +138,9 @@ export async function cambiarEstado(id, activo, quienLoHace) {
         usuario.rol === 'vicedirectora' &&
         vicedirectorasActivas.length === 1
     ) {
-        throw new Error('Tiene que quedar al menos una cuenta de vicedirección activa.')
+        throw new Error(
+            'Tiene que quedar al menos una cuenta de vicedirección activa.'
+        )
     }
 
     const actualizado = { ...usuario, activo }
@@ -127,6 +148,14 @@ export async function cambiarEstado(id, activo, quienLoHace) {
     guardarTodos(
         usuarios.map((item) => (item.id === id ? actualizado : item))
     )
+
+    await registrarAcceso({
+        evento: activo
+            ? EVENTOS.USUARIO_REACTIVADO
+            : EVENTOS.USUARIO_DESACTIVADO,
+        usuario: quienLoHace,
+        detalle: `${activo ? 'Reactivó' : 'Desactivó'} la cuenta ${actualizado.usuario}`,
+    })
 
     return sinPassword(actualizado)
 }
