@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import {
     Button,
+    Col,
     Container,
     Row,
     Spinner,
@@ -11,8 +12,11 @@ import Swal from 'sweetalert2'
 import CampoSelect from '../components/common/CampoSelect'
 import CampoTexto from '../components/common/CampoTexto'
 import FormularioUsuario from '../components/admin/FormularioUsuario'
+import FiltrosRegistro from '../components/admin/FiltrosRegistro'
+import TablaRegistroAccesos from '../components/admin/TablaRegistroAccesos'
 import TablaUsuarios from '../components/admin/TablaUsuarios'
 import Paginacion from '../components/common/Paginacion'
+import TarjetaIndicador from '../components/common/TarjetaIndicador'
 import { useAuth } from '../context/useAuth'
 import {
     actualizar,
@@ -20,28 +24,74 @@ import {
     crear,
     listar,
 } from '../services/usuariosService'
+import {
+    EVENTOS,
+    listar as listarAccesos,
+} from '../services/registroAccesosService'
 import { paginar } from '../utils/paginar'
+import { descargarCSV } from '../utils/exportarCSV'
+import { NOMBRE_ROL } from '../data/roles'
 
 const ESTADOS = ['Activos', 'Inactivos', 'Todos']
+
+const COLUMNAS_REGISTRO = [
+    {
+        titulo: 'Fecha y hora',
+        valor: (registro) => new Date(registro.fecha).toLocaleString('es-AR'),
+    },
+    {
+        titulo: 'Usuario',
+        valor: (registro) => registro.usuario || '—',
+    },
+    {
+        titulo: 'Nombre',
+        valor: (registro) => registro.nombre || '—',
+    },
+    {
+        titulo: 'Rol',
+        valor: (registro) =>
+            NOMBRE_ROL[registro.rol] ?? registro.rol ?? '—',
+    },
+    {
+        titulo: 'Evento',
+        valor: (registro) => registro.evento,
+    },
+    {
+        titulo: 'Detalle',
+        valor: (registro) => registro.detalle || '—',
+    },
+]
 
 function GestionUsuarios() {
     const { usuario: usuarioActual } = useAuth()
 
     const [usuarios, setUsuarios] = useState([])
+    const [registro, setRegistro] = useState([])
     const [cargando, setCargando] = useState(true)
+    const [ahora] = useState(() => Date.now())
     const [filtroEstado, setFiltroEstado] = useState('Activos')
     const [busqueda, setBusqueda] = useState('')
     const [pagina, setPagina] = useState(1)
+    const [filtrosRegistro, setFiltrosRegistro] = useState({
+        usuario: '',
+        evento: '',
+        desde: '',
+        hasta: '',
+    })
+    const [paginaRegistro, setPaginaRegistro] = useState(1)
     const [mostrarFormulario, setMostrarFormulario] = useState(false)
     const [usuarioEditando, setUsuarioEditando] = useState(null)
 
     useEffect(() => {
-        listar()
-            .then(setUsuarios)
+        Promise.all([listar(), listarAccesos()])
+            .then(([listaUsuarios, listaRegistro]) => {
+                setUsuarios(listaUsuarios)
+                setRegistro(listaRegistro)
+            })
             .catch((error) => {
                 Swal.fire({
                     icon: 'error',
-                    title: 'No se pudieron cargar las cuentas',
+                    title: 'No se pudieron cargar los datos',
                     text: error.message,
                     confirmButtonText: 'Entendido',
                 })
@@ -59,15 +109,63 @@ function GestionUsuarios() {
 
         const coincideBusqueda =
             !consulta ||
-            [usuario.nombre, usuario.usuario, usuario.mail]
-                .some((dato) =>
-                    String(dato ?? '').toLocaleLowerCase('es').includes(consulta)
-                )
+            [usuario.nombre, usuario.usuario, usuario.mail].some((dato) =>
+                String(dato ?? '').toLocaleLowerCase('es').includes(consulta)
+            )
 
         return coincideEstado && coincideBusqueda
     })
 
     const usuariosPaginados = paginar(usuariosVisibles, pagina, 20)
+
+    const fechaHoy = new Date(ahora).toLocaleDateString('en-CA')
+    const limiteSemana = ahora - 7 * 24 * 60 * 60 * 1000
+
+    const usuariosActivos = usuarios.filter((usuario) => usuario.activo).length
+    const usuariosInactivos = usuarios.filter((usuario) => !usuario.activo).length
+
+    const ingresosHoy = registro.filter(
+        (evento) =>
+            evento.evento === EVENTOS.INGRESO &&
+            new Date(evento.fecha).toLocaleDateString('en-CA') === fechaHoy
+    ).length
+
+    const intentosFallidos7Dias = registro.filter((evento) => {
+        const fechaEvento = new Date(evento.fecha).getTime()
+
+        return (
+            evento.evento === EVENTOS.INGRESO_FALLIDO &&
+            fechaEvento >= limiteSemana &&
+            fechaEvento <= ahora
+        )
+    }).length
+
+    const registroFiltrado = registro.filter((evento) => {
+        const fechaEvento = new Date(evento.fecha).toLocaleDateString('en-CA')
+
+        const coincideUsuario =
+            !filtrosRegistro.usuario ||
+            evento.usuario === filtrosRegistro.usuario
+
+        const coincideTipo =
+            !filtrosRegistro.evento ||
+            evento.evento === filtrosRegistro.evento
+
+        const coincideDesde =
+            !filtrosRegistro.desde || fechaEvento >= filtrosRegistro.desde
+
+        const coincideHasta =
+            !filtrosRegistro.hasta || fechaEvento <= filtrosRegistro.hasta
+
+        return (
+            coincideUsuario &&
+            coincideTipo &&
+            coincideDesde &&
+            coincideHasta
+        )
+    })
+
+    const registrosPaginados = paginar(registroFiltrado, paginaRegistro, 25)
 
     function abrirFormularioNuevo() {
         setUsuarioEditando(null)
@@ -84,9 +182,14 @@ function GestionUsuarios() {
         setUsuarioEditando(null)
     }
 
-    async function recargarUsuarios() {
-        const lista = await listar()
-        setUsuarios(lista)
+    async function recargarDatos() {
+        const [listaUsuarios, listaRegistro] = await Promise.all([
+            listar(),
+            listarAccesos(),
+        ])
+
+        setUsuarios(listaUsuarios)
+        setRegistro(listaRegistro)
     }
 
     async function guardarUsuario(datos) {
@@ -99,7 +202,7 @@ function GestionUsuarios() {
                 await crear(datos, usuarioActual)
             }
 
-            await recargarUsuarios()
+            await recargarDatos()
             cerrarFormulario()
 
             await Swal.fire({
@@ -137,7 +240,7 @@ function GestionUsuarios() {
 
         try {
             await cambiarEstadoServicio(id, activo, usuarioActual)
-            await recargarUsuarios()
+            await recargarDatos()
 
             await Swal.fire({
                 icon: 'success',
@@ -165,6 +268,22 @@ function GestionUsuarios() {
         setPagina(1)
     }
 
+    function cambiarFiltroRegistro(campo, valor) {
+        setFiltrosRegistro((filtrosActuales) => ({
+            ...filtrosActuales,
+            [campo]: valor,
+        }))
+        setPaginaRegistro(1)
+    }
+
+    function exportarRegistro() {
+        descargarCSV(
+            'registro-accesos.csv',
+            COLUMNAS_REGISTRO,
+            registroFiltrado
+        )
+    }
+
     return (
         <Container className="py-5">
             <title>Usuarios · Escuela Roca</title>
@@ -182,6 +301,41 @@ function GestionUsuarios() {
                     Nueva cuenta
                 </Button>
             </div>
+
+            <Row className="g-3 mb-4">
+                <Col xs={12} sm={6} lg={3}>
+                    <TarjetaIndicador
+                        titulo="Usuarios activos"
+                        valor={usuariosActivos}
+                        detalle="Cuentas habilitadas"
+                    />
+                </Col>
+
+                <Col xs={12} sm={6} lg={3}>
+                    <TarjetaIndicador
+                        titulo="Usuarios inactivos"
+                        valor={usuariosInactivos}
+                        detalle="Cuentas desactivadas"
+                    />
+                </Col>
+
+                <Col xs={12} sm={6} lg={3}>
+                    <TarjetaIndicador
+                        titulo="Ingresos de hoy"
+                        valor={ingresosHoy}
+                        detalle="Inicios de sesión exitosos"
+                    />
+                </Col>
+
+                <Col xs={12} sm={6} lg={3}>
+                    <TarjetaIndicador
+                        titulo="Intentos fallidos · 7 días"
+                        valor={intentosFallidos7Dias}
+                        detalle="Se resalta al llegar a 5"
+                        destacada={intentosFallidos7Dias >= 5}
+                    />
+                </Col>
+            </Row>
 
             <Tabs
                 defaultActiveKey="usuarios"
@@ -235,6 +389,51 @@ function GestionUsuarios() {
                                 nombre="usuarios"
                                 nombreSingular="usuario"
                                 idInicio="lista-usuarios"
+                            />
+                        </>
+                    )}
+                </Tab>
+
+                <Tab eventKey="registro" title="Registro de accesos">
+                    <FiltrosRegistro
+                        usuarios={usuarios}
+                        filtros={filtrosRegistro}
+                        onCambiar={cambiarFiltroRegistro}
+                    />
+
+                    <div className="d-flex justify-content-end mb-3">
+                        <Button
+                            type="button"
+                            variant="outline-success"
+                            onClick={exportarRegistro}
+                            disabled={registroFiltrado.length === 0}
+                        >
+                            Exportar a Excel (CSV)
+                        </Button>
+                    </div>
+
+                    {cargando ? (
+                        <div className="py-5 text-center">
+                            <Spinner animation="border" role="status">
+                                <span className="visually-hidden">
+                                    Cargando registro de accesos
+                                </span>
+                            </Spinner>
+                        </div>
+                    ) : (
+                        <>
+                            <div id="tabla-registro-accesos" />
+
+                            <TablaRegistroAccesos
+                                registros={registrosPaginados.items}
+                            />
+
+                            <Paginacion
+                                {...registrosPaginados}
+                                onCambiar={setPaginaRegistro}
+                                nombre="eventos"
+                                nombreSingular="evento"
+                                idInicio="tabla-registro-accesos"
                             />
                         </>
                     )}
