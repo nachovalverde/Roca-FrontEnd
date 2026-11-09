@@ -5,3 +5,4 @@ Disallow: /login
 Disallow: /admin
 Disallow: /docente
 Disallow: /inscripciones
+Disallow: /recuperar
