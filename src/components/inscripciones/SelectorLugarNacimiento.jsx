@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
-import Swal from 'sweetalert2'
 import CampoSelect from '../common/CampoSelect'
 import CampoTexto from '../common/CampoTexto'
 import { listarLocalidades, listarProvincias } from '../../services/georefService'
+import { Alerta } from '../../utils/alertas'
 
 // El texto viene del servicio: explica si es falta de internet o si el servicio está saturado
 function avisarError(titulo, texto) {
-  Swal.fire({
+  Alerta.fire({
     icon: 'error',
     title: titulo,
     text: texto,
