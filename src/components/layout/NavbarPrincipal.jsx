@@ -131,8 +131,14 @@ function NavbarPrincipal() {
                         <div className="d-none d-lg-flex col-lg-4 align-items-center justify-content-end">
                             {usuario ? (
                                 <div className="d-flex align-items-center gap-3">
-                                    <Navbar.Text>
-                                        {usuario.nombre} · {NOMBRE_ROL[usuario.rol] ?? usuario.rol}
+                                    {/* Nombre arriba y rol abajo */}
+                                    <Navbar.Text className="d-flex flex-column text-end text-nowrap lh-sm py-0">
+                                        <span className="small fw-semibold text-body">
+                                            {usuario.nombre}
+                                        </span>
+                                        <span className="small">
+                                            {NOMBRE_ROL[usuario.rol] ?? usuario.rol}
+                                        </span>
                                     </Navbar.Text>
 
                                     <Button
