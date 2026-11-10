@@ -1,15 +1,30 @@
 import { generarInscripcionesDemo } from '../data/inscripcionesDemo'
 import { guardarEnNavegador } from '../utils/almacenamiento'
+import { migrarInscripcion } from '../utils/personas'
 
 const CLAVE = 'roca:inscripciones'
 
 const firma = (usuario) => (usuario ? {id: usuario.id, nombre: usuario.nombre } : null)
 
+// Las inscripciones guardadas con el formato viejo se convierten al leerlas
 function leerTodas() {
   try {
-    return JSON.parse(localStorage.getItem(CLAVE)) ?? []
+    return (JSON.parse(localStorage.getItem(CLAVE)) ?? []).map(migrarInscripcion)
   } catch {
     return []
+  }
+}
+
+// Un alumno se inscribe una sola vez por ciclo. En el back va a ser un índice único (alumno y ciclo).
+function controlarDniRepetido(inscripciones, datos, idActual = null) {
+  const repetida = inscripciones.find(
+    (item) =>
+      item.id !== idActual &&
+      item.alumno.dni === datos.alumno.dni &&
+      item.alumno.cicloLectivo === datos.alumno.cicloLectivo
+  )
+  if (repetida) {
+    throw new Error(`Ya hay una inscripción de ese DNI para el ciclo ${datos.alumno.cicloLectivo}`)
   }
 }
 
@@ -30,9 +45,11 @@ export async function obtener(id) {
 }
 
 export async function crear(datos, autor) {
+  const inscripciones = leerTodas()
+  controlarDniRepetido(inscripciones, datos)
   const ahora = new Date().toISOString()
-  const nueva = {...datos, id: crypto.randomUUID(), creadaEl: ahora, actualizadaEl: ahora, creadaPor: firma(autor), actualizadaPor: null,}
-  guardarTodas([...leerTodas(), nueva])
+  const nueva = { ...datos, id: crypto.randomUUID(), creadaEl: ahora, actualizadaEl: ahora, creadaPor: firma(autor), actualizadaPor: null }
+  guardarTodas([...inscripciones, nueva])
   return nueva
 }
 
@@ -40,6 +57,7 @@ export async function actualizar(id, datos, autor) {
   const inscripciones = leerTodas()
   const anterior = inscripciones.find((item) => item.id === id)
   if (!anterior) throw new Error ('No se encuentra esa inscripción')
+    controlarDniRepetido(inscripciones, datos, id)
 
   const actualizada = {...anterior, ...datos, id, actualizadaEl: new Date().toISOString(), actualizadaPor: firma(autor) }
   guardarTodas(inscripciones.map((item) => (item.id === id ? actualizada : item)))

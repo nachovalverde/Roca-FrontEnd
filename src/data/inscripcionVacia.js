@@ -1,29 +1,37 @@
+
+const domicilioVacio = { domicilioCalle: '', domicilioNumero: '', domicilioPisoDepto: '', domicilioBarrio: '' }
+
 const tutorVacio = {
-  apellidoNombres: '',
+  apellido: '',
+  nombres: '',
   dni: '',
+  cuil: '',
   ocupacion: '',
   caracter: '',
   nivelEstudio: '',
   estadoEstudio: '',
-  telefonos: '',
+  telefono: '',
+  telefonoAlternativo: '',
   mail: '',
-  domicilio: '',
+  ...domicilioVacio,
   planSocial: '',
 }
 
-const contactoVacio = { apellidoNombres: '', parentesco: '', telefonos: '' }
+const contactoVacio = { apellido: '', nombres: '', parentesco: '', telefono: '', telefonoAlternativo: '' }
 
 export const inscripcionVacia = {
   alumno: {
-    apellidoNombres: '',
+    apellido: '',
+    nombres: '',
     dni: '',
-    sexo:'',
+    cuil: '',
+    sexo: '',
     fechaNacimiento: '',
     actaNacimiento: '',
     provinciaNacimiento: '',
     lugarNacimiento: '',
-    domicilio: '',
-    cicloLectivo:'',
+    ...domicilioVacio,
+    cicloLectivo: '',
     grado: '',
     repitente: '',
     escuelaOrigen: '',
