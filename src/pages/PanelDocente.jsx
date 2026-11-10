@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Alert, Button, Container, Spinner } from 'react-bootstrap'
-import Swal from 'sweetalert2'
 import FiltrosAlumnos from '../components/inscripciones/FiltrosAlumnos'
 import TablaAlumnos from '../components/inscripciones/TablaAlumnos'
 import Paginacion from '../components/common/Paginacion'
@@ -12,7 +11,7 @@ import { ciclosDisponibles } from '../utils/ciclos'
 import { paginar } from '../utils/paginar'
 import { descargarCSV, fechaDeHoy } from '../utils/exportarCSV'
 import { COLUMNAS_INSCRIPCIONES } from '../data/columnasExportacion'
-
+import { Alerta, mostrarError, mostrarExito } from '../utils/alertas'
 
 // El encabezado muestra siempre el total; lo filtrado se cuenta abajo de la tabla
 function textoCantidad(total) {
@@ -24,6 +23,7 @@ function PanelDocente() {
 
   const [inscripciones, setInscripciones] = useState([])
   const [cargando, setCargando] = useState(true)
+  const [errorCarga, setErrorCarga] = useState('')
   // La maestra arranca viendo su grado; la vice, todos
   const [filtros, setFiltros] = useState({
     busqueda: '',
@@ -35,11 +35,16 @@ function PanelDocente() {
 
   // Al entrar al panel, pide las inscripciones una sola vez
   useEffect(() => {
-    inscripcionesService.listar().then((lista) => {
-      setInscripciones(lista)
-      setFiltros((anterior) => ({...anterior, ciclo:anterior.ciclo || ciclosDisponibles(lista)[0]|| ''}))
-      setCargando(false)
-    })
+    inscripcionesService
+      .listar()
+      .then((lista) => {
+        setInscripciones(lista)
+        setFiltros((anterior) => ({ ...anterior, ciclo: anterior.ciclo || ciclosDisponibles(lista)[0] || '' }))
+      })
+      // Si falla, se guarda el mensaje para mostrarlo en lugar de la tabla
+      .catch((error) => setErrorCarga(error.message))
+      // Pase lo que pase, el spinner se apaga
+      .finally(() => setCargando(false))
   }, [])
 
   const cambiarFiltro = (campo, valor) => {
@@ -63,8 +68,8 @@ function PanelDocente() {
 
   const paginaActual =paginar(inscripcionesVisibles, pagina, 20)
 
-  const eliminarInscripcion = async (inscripcion) => {
-    const { isConfirmed } = await Swal.fire({
+    const eliminarInscripcion = async (inscripcion) => {
+    const { isConfirmed } = await Alerta.fire({
       title: '¿Eliminar la inscripción?',
       text: `Se va a borrar la inscripción de ${inscripcion.alumno.apellidoNombres}. No se puede deshacer.`,
       icon: 'warning',
@@ -75,17 +80,14 @@ function PanelDocente() {
     })
     if (!isConfirmed) return
 
-    await inscripcionesService.eliminar(inscripcion.id)
-    setInscripciones((anterior) => anterior.filter((item) => item.id !== inscripcion.id))
-
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'success',
-      title: 'Inscripción eliminada',
-      showConfirmButton: false,
-      timer: 2000,
-    })
+    try {
+      await inscripcionesService.eliminar(inscripcion.id)
+      // Se saca de la lista solo si se borró de verdad
+      setInscripciones((anterior) => anterior.filter((item) => item.id !== inscripcion.id))
+      mostrarExito('Inscripción eliminada')
+    } catch (error) {
+      mostrarError(error, 'No se pudo eliminar la inscripción')
+    }
   }
 
     // Vuelve a pedir la lista y salta al ciclo más reciente que haya quedado
@@ -96,21 +98,18 @@ function PanelDocente() {
     setPagina(1)
   }
 
-  const cargarDemo = async () => {
-    await inscripcionesService.cargarDatosDemo()
-    await recargarLista()
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'success',
-      title: 'Datos de demostración cargados',
-      showConfirmButton: false,
-      timer: 2000,
-    })
+    const cargarDemo = async () => {
+    try {
+      await inscripcionesService.cargarDatosDemo()
+      await recargarLista()
+      mostrarExito('Datos de demostración cargados')
+    } catch (error) {
+      mostrarError(error, 'No se pudieron cargar los datos de demostración')
+    }
   }
 
   const quitarDemo = async () => {
-    const { isConfirmed } = await Swal.fire({
+    const { isConfirmed } = await Alerta.fire({
       title: '¿Quitar los datos de demostración?',
       text: 'Las inscripciones cargadas a mano no se tocan.',
       icon: 'question',
@@ -121,8 +120,13 @@ function PanelDocente() {
     })
     if (!isConfirmed) return
 
-    await inscripcionesService.borrarDatosDemo()
-    await recargarLista()
+    try {
+      await inscripcionesService.borrarDatosDemo()
+      await recargarLista()
+      mostrarExito('Datos de demostración quitados')
+    } catch (error) {
+      mostrarError(error, 'No se pudieron quitar los datos de demostración')
+    }
   }
 
   // Exporta todo lo filtrado (no solo la página que se ve); el nombre del archivo dice qué filtros tenía
@@ -141,7 +145,16 @@ function PanelDocente() {
         </Spinner>
       </div>
     )
-  } else if (inscripciones.length === 0) {
+    } else if (errorCarga) {
+    contenido = (
+      <Alert variant="danger">
+        <p className="mb-2">No se pudieron cargar las inscripciones: {errorCarga}</p>
+        <Button variant="outline-danger" size="sm" onClick={() => window.location.reload()}>
+          Reintentar
+        </Button>
+      </Alert>
+    )
+    } else if (inscripciones.length === 0) {
     contenido = (
       <Alert variant="light" className="border">
         Todavía no hay inscripciones cargadas. Empezá con{' '}
@@ -176,9 +189,7 @@ function PanelDocente() {
         <div>
           <h1 className="h2 mb-1">Panel docente</h1>
           <p className="text-body-secondary mb-0">
-            {cargando
-              ? 'Cargando inscripciones…'
-              : textoCantidad(inscripciones.length)}
+            {cargando ? 'Cargando inscripciones…' : errorCarga ? 'Sin datos' : textoCantidad(inscripciones.length)}
           </p>
         </div>
         <div className="d-flex flex-wrap gap-2">
