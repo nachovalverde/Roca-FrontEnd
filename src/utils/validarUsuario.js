@@ -5,8 +5,12 @@ export function validarPassword(password, repetirPassword) {
     const clave = password ?? ''
     const repeticion = repetirPassword ?? ''
 
-    if (clave.length < 6) {
-        errores.password = 'La contraseña debe tener al menos 6 caracteres'
+    // Mínimo 8 caracteres, con al menos una letra y un número
+    if (clave.length < 8) {
+        errores.password = 'La contraseña debe tener al menos 8 caracteres'
+    } else if (!/\p{L}/u.test(clave) || !/\d/.test(clave)) {
+        errores.password =
+            'La contraseña tiene que tener al menos una letra y un número'
     } else if (clave !== repeticion) {
         errores.repetirPassword = 'Las contraseñas no coinciden'
     }
