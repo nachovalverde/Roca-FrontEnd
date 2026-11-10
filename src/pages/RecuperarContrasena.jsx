@@ -67,7 +67,7 @@ function RecuperarContrasena() {
                 icon: 'success',
                 title: 'Contraseña actualizada',
                 text: 'Ya podés ingresar con tu nueva contraseña.',
-                confirmButtonText: 'Ir al login',
+                confirmButtonText: 'Ir al ingreso',
             })
 
             navigate('/login', { replace: true })

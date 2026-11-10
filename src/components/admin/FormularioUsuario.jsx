@@ -90,6 +90,7 @@ function FormularioUsuario({ usuarioInicial = null, onGuardar, onCancelar }) {
                             label="Mail"
                             name="mail"
                             type="email"
+                            maxLength={100}
                             value={datos.mail}
                             onChange={cambiarCampo}
                             error={errores.mail}
