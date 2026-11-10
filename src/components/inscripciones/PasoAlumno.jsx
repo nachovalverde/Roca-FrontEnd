@@ -6,6 +6,7 @@ import { GRADOS, SI_NO, TUTORES, SEXOS, CICLOS } from '../../data/opcionesFicha'
 import { calcularEdad } from '../../utils/calcularEdad'
 import { soloDigitos, soloLetras } from '../../utils/filtros'
 import SelectorLugarNacimiento from './SelectorLugarNacimiento'
+import CamposDomicilio from './CamposDomicilio'
 
 function PasoAlumno({ datos, onChange, errores = {} }) {
 
@@ -15,11 +16,16 @@ function PasoAlumno({ datos, onChange, errores = {} }) {
     <>
       <h2 className="h4 mb-3">Datos del alumno</h2>
       <Row className="g-3">
-        <CampoTexto id="alumno-apellidoNombres" label="Apellido y nombres" name="apellidoNombres"
-          value={datos.apellidoNombres} onChange={onChange} md={8}
-          requerido error={errores.apellidoNombres} filtro={soloLetras} />
-        <CampoTexto id="alumno-dni" label="CUIL o DNI" name="dni" value={datos.dni} onChange={onChange} md={4}
-          requerido error={errores.dni} filtro={soloDigitos} inputMode="numeric" maxLength={11} />
+        <CampoTexto id="alumno-apellido" label="Apellido" name="apellido"
+          value={datos.apellido} onChange={onChange} md={6}
+          requerido error={errores.apellido} filtro={soloLetras} maxLength={60} />
+        <CampoTexto id="alumno-nombres" label="Nombres" name="nombres"
+          value={datos.nombres} onChange={onChange} md={6}
+          requerido error={errores.nombres} filtro={soloLetras} maxLength={60} />
+        <CampoTexto id="alumno-dni" label="DNI" name="dni" value={datos.dni} onChange={onChange} md={3}
+          requerido error={errores.dni} filtro={soloDigitos} inputMode="numeric" maxLength={8} />
+        <CampoTexto id="alumno-cuil" label="CUIL" name="cuil" value={datos.cuil} onChange={onChange} md={3}
+          error={errores.cuil} filtro={soloDigitos} inputMode="numeric" maxLength={11} placeholder="Sin guiones" />
 
         <CampoTexto id="alumno-fechaNacimiento" label="Fecha de nacimiento" name="fechaNacimiento"
           type="date" value={datos.fechaNacimiento} onChange={onChange} md={4}
@@ -36,7 +42,7 @@ function PasoAlumno({ datos, onChange, errores = {} }) {
           requerido error={errores.sexo} />
 
         <CampoTexto id="alumno-actaNacimiento" label="N.º de acta de nacimiento" name="actaNacimiento"
-          value={datos.actaNacimiento} onChange={onChange} md={6} />
+          value={datos.actaNacimiento} onChange={onChange} md={6} maxLength={30} />
 
         <SelectorLugarNacimiento
           provincia={datos.provinciaNacimiento}
@@ -44,9 +50,7 @@ function PasoAlumno({ datos, onChange, errores = {} }) {
           onChange={onChange}
         />
 
-        <CampoTexto id="alumno-domicilio" label="Domicilio" name="domicilio"
-          value={datos.domicilio} onChange={onChange} md={6}
-          requerido error={errores.domicilio} />
+        <CamposDomicilio prefijo="alumno" datos={datos} onChange={onChange} errores={errores} requerido />
 
         <CampoSelect id="alumno-cicloLectivo" label="Ciclo lectivo" name="cicloLectivo"
           value={datos.cicloLectivo} onChange={onChange} opciones={CICLOS} md={4}
@@ -59,7 +63,7 @@ function PasoAlumno({ datos, onChange, errores = {} }) {
           value={datos.repitente} onChange={onChange} opciones={SI_NO} md={4}
           requerido error={errores.repitente} />
         <CampoTexto id="alumno-escuelaOrigen" label="Escuela de origen" name="escuelaOrigen"
-          value={datos.escuelaOrigen} onChange={onChange} md={4} />
+          value={datos.escuelaOrigen} onChange={onChange} md={4} maxLength={80}/>
 
         <CampoTexto id="alumno-cantidadHermanos" label="Cantidad de hermanos" name="cantidadHermanos"
           value={datos.cantidadHermanos} onChange={onChange} md={4}
