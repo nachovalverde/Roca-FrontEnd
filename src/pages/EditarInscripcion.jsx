@@ -5,6 +5,7 @@ import { Alert, Container, Spinner } from 'react-bootstrap'
 import FormularioInscripcion from '../components/inscripciones/FormularioInscripcion'
 import * as inscripcionesService from '../services/inscripcionesService'
 import { useAuth } from '../context/useAuth'
+import { mostrarError } from '../utils/alertas'
 
 function EditarInscripcion() {
   const { id } = useParams()
@@ -29,9 +30,15 @@ function EditarInscripcion() {
     cargar()
   }, [id])
 
-  const guardar = async (datos) => {
-    await inscripcionesService.actualizar(id, datos, usuario)
-    navigate(`/inscripciones/${id}`, { state: { recienGuardada: true } })
+    const guardar = async (datos) => {
+    try {
+      await inscripcionesService.actualizar(id, datos, usuario)
+      navigate(`/inscripciones/${id}`, { state: { recienGuardada: true } })
+      return true
+    } catch (error) {
+      mostrarError(error, 'No se pudieron guardar los cambios')
+      return false
+    }
   }
 
   if (cargando) {

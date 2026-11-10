@@ -6,6 +6,7 @@ import { inscripcionVacia } from '../data/inscripcionVacia'
 import * as inscripcionesService from '../services/inscripcionesService'
 import { borrarBorrador, guardarBorrador, leerBorrador } from '../services/borradorService'
 import { useAuth } from '../context/useAuth'
+import { mostrarError } from '../utils/alertas'
 
 // '2026-10-15T14:30:00Z' → '15/10, 11:30'
 function formatearMomento(fechaISO) {
@@ -32,10 +33,17 @@ function NuevaInscripcion() {
     setReinicios((anterior) => anterior + 1)
   }
 
-  const guardar = async (datos) => {
-    const nueva = await inscripcionesService.crear(datos, usuario)
-    borrarBorrador()
-    navigate(`/inscripciones/${nueva.id}`, { state: { recienGuardada: true } })
+    const guardar = async (datos) => {
+    try {
+      const nueva = await inscripcionesService.crear(datos, usuario)
+      borrarBorrador()
+      navigate(`/inscripciones/${nueva.id}`, { state: { recienGuardada: true } })
+      return true
+    } catch (error) {
+      // El borrador no se borra: la maestra no pierde lo que cargó
+      mostrarError(error, 'No se pudo guardar la inscripción')
+      return false
+    }
   }
 
   return (

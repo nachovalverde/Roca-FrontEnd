@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Card, Form, Button, Alert } from 'react-bootstrap'
 import IndicadorPasos from './IndicadorPasos'
 import PasoAlumno from './PasoAlumno'
@@ -55,7 +55,13 @@ function FormularioInscripcion({
     setPasoActual(paso)
   }
 
-  const manejarEnvio = (evento) => {
+    // Mientras se guarda, el botón queda deshabilitado (estado, para que se vea) y la referencia
+  // frena un segundo envío: con un doble clic, los dos llegan antes de que React redibuje el botón.
+  // onGuardar devuelve true si guardó: en ese caso no se desbloquea, porque la página se va al detalle
+  const [guardando, setGuardando] = useState(false)
+  const guardandoRef = useRef(false)
+
+  const manejarEnvio = async (evento) => {
     evento.preventDefault()
 
     // Mientras el paso actual tenga errores, no se avanza
@@ -65,7 +71,19 @@ function FormularioInscripcion({
     }
 
     if (esUltimoPaso) {
-      onGuardar?.(datos)
+      if (guardandoRef.current) return
+      guardandoRef.current = true
+      setGuardando(true)
+      let guardo = false
+      try {
+        guardo = await onGuardar?.(datos)
+      } finally {
+        // Solo si no se pudo guardar se vuelve a habilitar, para corregir y reintentar
+        if (!guardo) {
+          guardandoRef.current = false
+          setGuardando(false)
+        }
+      }
     } else {
       irAPaso(pasoActual + 1)
     }
@@ -157,8 +175,8 @@ function FormularioInscripcion({
             >
               Anterior
             </Button>
-            <Button type="submit" variant="primary">
-              {esUltimoPaso ? textoGuardar : 'Siguiente'}
+            <Button type="submit" variant="primary" disabled={guardando}>
+              {guardando ? 'Guardando…' : esUltimoPaso ? textoGuardar : 'Siguiente'}
             </Button>
           </div>
         </Form>
