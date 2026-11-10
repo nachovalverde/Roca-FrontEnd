@@ -7,11 +7,27 @@ import { guardarEnNavegador } from '../utils/almacenamiento'
 
 const CLAVE = 'roca_usuarios'
 
+function nombreParaMostrar(cuenta) {
+    return `${cuenta.nombres ?? ''} ${cuenta.apellido ?? ''}`.trim()
+}
+
+function migrarCuenta(cuenta) {
+    if (cuenta.apellido !== undefined) return cuenta
+
+    const partes = String(cuenta.nombre ?? '')
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+    const apellido = partes.length > 1 ? partes.pop() : ''
+
+    return { ...cuenta, nombres: partes.join(' '), apellido }
+}
+
 function leerTodos() {
     try {
         const guardados = JSON.parse(localStorage.getItem(CLAVE))
 
-        if (guardados) return guardados
+        if (guardados) return guardados.map(migrarCuenta)
     } catch {
         // Si el dato guardado está dañado, se inicializa con los usuarios de prueba.
     }
@@ -68,6 +84,7 @@ export async function crear(datos, quienLoHace) {
 
     const nuevo = {
         ...datos,
+        nombre: nombreParaMostrar(datos),
         id: Math.max(0, ...usuarios.map((usuario) => usuario.id)) + 1,
         grado: datos.rol === 'maestro' ? datos.grado : '',
         activo: true,
@@ -99,9 +116,11 @@ export async function actualizar(id, datos, quienLoHace) {
     const actualizado = {
         ...anterior,
         ...datos,
+        nombre: nombreParaMostrar(datos),
         password: datos.password ? datos.password : anterior.password,
         grado: datos.rol === 'maestro' ? datos.grado : '',
     }
+    
 
     guardarTodos(
         usuarios.map((usuario) => (usuario.id === id ? actualizado : usuario))
