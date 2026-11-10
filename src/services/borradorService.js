@@ -1,4 +1,5 @@
 import { inscripcionVacia } from '../data/inscripcionVacia'
+import { guardarEnNavegador } from '../utils/almacenamiento'
 
 // Guarda lo que se está cargando en una inscripción nueva, para no perderlo
 // si se cierra la pestaña o se recarga la página. Es solo del navegador:
@@ -7,12 +8,19 @@ const CLAVE = 'roca:borrador-inscripcion'
 
 const estaVacio = (datos) => JSON.stringify(datos) === JSON.stringify(inscripcionVacia)
 
+// Se llama mientras la maestra escribe: nunca tira un error, porque lo atraparía el límite
+// de errores y se perdería lo cargado. Devuelve false si no pudo guardar.
 export function guardarBorrador(datos) {
-  if (estaVacio(datos)) {
-    localStorage.removeItem(CLAVE)
-    return
+  try {
+    if (estaVacio(datos)) {
+      localStorage.removeItem(CLAVE)
+    } else {
+      guardarEnNavegador(CLAVE, JSON.stringify({ datos, guardadoEl: new Date().toISOString() }))
+    }
+    return true
+  } catch {
+    return false
   }
-  localStorage.setItem(CLAVE, JSON.stringify({ datos, guardadoEl: new Date().toISOString() }))
 }
 
 export function leerBorrador() {

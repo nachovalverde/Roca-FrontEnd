@@ -1,4 +1,5 @@
 import { generarInscripcionesDemo } from '../data/inscripcionesDemo'
+import { guardarEnNavegador } from '../utils/almacenamiento'
 
 const CLAVE = 'roca:inscripciones'
 
@@ -12,8 +13,10 @@ function leerTodas() {
   }
 }
 
-function guardarTodas (inscrpciones) {
-  localStorage.setItem(CLAVE, JSON.stringify(inscrpciones))
+// Si el navegador no tiene lugar, guardarEnNavegador tira un error con un mensaje claro,
+// que le llega a la página y lo muestra con mostrarError
+function guardarTodas(inscripciones) {
+  guardarEnNavegador(CLAVE, JSON.stringify(inscripciones))
 }
 
 export async function listar() {
@@ -44,7 +47,7 @@ export async function actualizar(id, datos, autor) {
 }
 
 export async function eliminar(id) {
-  guardarTodas (leerTodas().filter((item) => item.id !== id))
+  guardarTodas(leerTodas().filter((item) => item.id !== id))
 }
 
 export async function cargarDatosDemo() {

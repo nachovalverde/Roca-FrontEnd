@@ -14,6 +14,7 @@ import { ciclosDisponibles } from '../utils/ciclos'
 function EstadisticasInscripciones() {
   const [inscripciones, setInscripciones] = useState([])
   const [cargando, setCargando] = useState(true)
+  const [errorCarga, setErrorCarga] = useState('')
   const [filtros, setFiltros] = useState({ ciclo: '', cicloComparado: '', grado: '' })
 
   // Al entrar, pide las inscripciones una sola vez y arranca en el ciclo más reciente
@@ -23,8 +24,13 @@ function EstadisticasInscripciones() {
       .then((lista) => {
         setInscripciones(lista)
         const [actual, anterior = ''] = ciclosDisponibles(lista)
-        setFiltros((previos) => ({ ...previos, ciclo: previos.ciclo || actual || '', cicloComparado: previos.cicloComparado || anterior }))
+        setFiltros((previos) => ({ 
+          ...previos, 
+          ciclo: previos.ciclo || actual || '', 
+          cicloComparado: previos.cicloComparado || anterior 
+        }))
       })
+      .catch((error) => setErrorCarga(error.message))
       .finally(() => setCargando(false))
   }, [])
 
@@ -32,8 +38,10 @@ function EstadisticasInscripciones() {
 
   const ciclos = ciclosDisponibles(inscripciones)
   const estadisticas = calcularEstadisticas(inscripciones, filtros)
+
   // Las inscripciones de un ciclo se cargan el año anterior: si el ciclo es el del año que viene, la inscripción sigue abierta
   const inscripcionAbierta = Number(filtros.ciclo) === new Date().getFullYear() + 1
+  
   let variacion = 'Sin comparar'
   if (estadisticas.variacion !== null) {
     variacion = `${estadisticas.variacion > 0 ? '+' : ''}${estadisticas.variacion} % vs. ${filtros.cicloComparado}`
@@ -51,17 +59,28 @@ function EstadisticasInscripciones() {
     <Container className="py-4">
       <title>Estadísticas de inscripciones · Escuela Roca</title>
       <meta name="robots" content="noindex" />
-
       <h1 className="h2 mb-1">Estadísticas de inscripciones</h1>
       <p className="text-body-secondary mb-4">Resumen de las inscripciones de cada ciclo lectivo: por grado, por sexo y semana a semana.</p>
 
-      {cargando && <div className="text-center py-5"><Spinner animation="border" role="status"><span className="visually-hidden">Cargando</span></Spinner></div>}
-
-      {!cargando && inscripciones.length === 0 && (
-        <Alert variant="light" className="border">Todavía no hay inscripciones. Desde el panel docente podés cargar datos de demostración.</Alert>
+      {cargando && (
+        <div className="text-center py-5">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Cargando</span>
+          </Spinner>
+        </div>
       )}
 
-      {!cargando && inscripciones.length > 0 && (
+      {!cargando && errorCarga && (
+        <Alert variant="danger">No se pudieron cargar las inscripciones: {errorCarga}</Alert>
+      )}
+
+      {!cargando && !errorCarga && inscripciones.length === 0 && (
+        <Alert variant="light" className="border">
+          Todavía no hay inscripciones. Desde el panel docente podés cargar datos de demostración.
+        </Alert>
+      )}
+
+      {!cargando && !errorCarga && inscripciones.length > 0 && (
         <>
           <Row className="g-3 mb-4" role="search">
             <CampoSelect id="filtro-ciclo" label="Ciclo lectivo" name="ciclo" value={filtros.ciclo} onChange={cambiarFiltro} opciones={ciclos} md={4} opcionVacia="Elegí un ciclo" />
@@ -79,28 +98,36 @@ function EstadisticasInscripciones() {
 
           <Row className="g-3 mb-4">
             <Col lg={6}>
-              <Card className="h-100"><Card.Body>
-                <h2 className="h5">Alumnos por grado</h2>
-                <GraficoPorGrado datos={estadisticas.porGrado} ciclo={filtros.ciclo} cicloComparado={filtros.cicloComparado} />
-              </Card.Body></Card>
+              <Card className="h-100">
+                <Card.Body>
+                  <h2 className="h5">Alumnos por grado</h2>
+                  <GraficoPorGrado datos={estadisticas.porGrado} ciclo={filtros.ciclo} cicloComparado={filtros.cicloComparado} />
+                </Card.Body>
+              </Card>
             </Col>
             <Col lg={6}>
-              <Card className="h-100"><Card.Body>
-                <h2 className="h5">Composición por sexo en cada grado</h2>
-                <GraficoSexoPorGrado datos={estadisticas.porGrado} />
-              </Card.Body></Card>
+              <Card className="h-100">
+                <Card.Body>
+                  <h2 className="h5">Composición por sexo en cada grado</h2>
+                  <GraficoSexoPorGrado datos={estadisticas.porGrado} />
+                </Card.Body>
+              </Card>
             </Col>
           </Row>
 
-          <Card className="mb-4"><Card.Body>
-            <h2 className="h5">Evolución de la carga, semana a semana</h2>
-            <GraficoEvolucion datos={estadisticas.porSemana} />
-          </Card.Body></Card>
+          <Card className="mb-4">
+            <Card.Body>
+              <h2 className="h5">Evolución de la carga, semana a semana</h2>
+              <GraficoEvolucion datos={estadisticas.porSemana} />
+            </Card.Body>
+          </Card>
 
-          <Card><Card.Body>
-            <h2 className="h5 mb-3">Resumen por grado</h2>
-            <TablaResumenGrados datos={estadisticas.porGrado} ciclo={filtros.ciclo} cicloComparado={filtros.cicloComparado} grado={filtros.grado} />
-          </Card.Body></Card>
+          <Card>
+            <Card.Body>
+              <h2 className="h5 mb-3">Resumen por grado</h2>
+              <TablaResumenGrados datos={estadisticas.porGrado} ciclo={filtros.ciclo} cicloComparado={filtros.cicloComparado} grado={filtros.grado} />
+            </Card.Body>
+          </Card>
         </>
       )}
     </Container>

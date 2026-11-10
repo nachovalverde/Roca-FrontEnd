@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { guardarEnNavegador } from '../utils/almacenamiento'
 
 
 const API_URL = import.meta.env.VITE_GEOREF_URL
@@ -26,7 +27,7 @@ function leerGuardado(clave) {
 
 function guardar(clave, datos) {
   try {
-    localStorage.setItem(clave, JSON.stringify({ fecha: Date.now(), datos }))
+    guardarEnNavegador(clave, JSON.stringify({ fecha: Date.now(), datos }))
   } catch {
     // Sin lugar en el navegador: se usan igual, solo que no quedan guardados
   }
