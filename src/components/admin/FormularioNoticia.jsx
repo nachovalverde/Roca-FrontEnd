@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import {
     Button,
     Col,
@@ -43,6 +43,8 @@ function FormularioNoticia({
         crearDatosIniciales(noticiaInicial)
     )
     const [errores, setErrores] = useState({})
+    const [guardando, setGuardando] = useState(false)
+    const guardandoRef = useRef(false)
 
     function cambiarCampo(campo, valor) {
         setDatos((datosActuales) => ({
@@ -51,7 +53,7 @@ function FormularioNoticia({
         }))
     }
 
-    function manejarEnvio(evento) {
+    async function manejarEnvio(evento) {
         evento.preventDefault()
 
         const erroresFormulario = validarNoticia(datos)
@@ -59,7 +61,19 @@ function FormularioNoticia({
 
         if (Object.keys(erroresFormulario).length > 0) return
 
-        onGuardar(datos)
+        if (guardandoRef.current) return
+        guardandoRef.current = true
+        setGuardando(true)
+
+        let guardo = false
+        try {
+            guardo = await onGuardar(datos)
+        } finally {
+            if (!guardo) {
+                guardandoRef.current = false
+                setGuardando(false)
+            }
+        }
     }
 
     return (
@@ -189,8 +203,12 @@ function FormularioNoticia({
                         Cancelar
                     </Button>
 
-                    <Button type="submit" variant="primary">
-                        Guardar noticia
+                    <Button
+                        type="submit"
+                        variant="primary"
+                        disabled={guardando}
+                    >
+                        {guardando ? 'Guardando…' : 'Guardar noticia'}
                     </Button>
                 </Modal.Footer>
             </Form>

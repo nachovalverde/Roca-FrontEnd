@@ -9,16 +9,16 @@ function TablaNoticias({
     onEliminar,
 }) {
     return (
-        <Table responsive hover className="align-middle">
+        <Table responsive hover className="align-middle position-relative">
             <caption className="visually-hidden">
                 Noticias de la escuela
             </caption>
 
             <thead>
                 <tr>
-                    <th scope="col">Fecha</th>
+                    <th scope="col" className="d-none d-sm-table-cell">Fecha</th>
                     <th scope="col">Título</th>
-                    <th scope="col">Categoría</th>
+                    <th scope="col" className="d-none d-md-table-cell">Categoría</th>
                     <th scope="col">Estado</th>
                     <th scope="col">
                         <span className="visually-hidden">Acciones</span>
@@ -30,7 +30,9 @@ function TablaNoticias({
                 {noticias.length > 0 ? (
                     noticias.map((noticia) => (
                         <tr key={noticia.id}>
-                            <td>{formatearFecha(noticia.fecha)}</td>
+                            <td className="d-none d-sm-table-cell">
+                                {formatearFecha(noticia.fecha)}
+                            </td>
 
                             <td className="fw-semibold">
                                 {noticia.publicada ? (
@@ -42,7 +44,7 @@ function TablaNoticias({
                                 )}
                             </td>
 
-                            <td>{noticia.categoria}</td>
+                            <td className="d-none d-md-table-cell">{noticia.categoria}</td>
 
                             <td>
                                 <Badge

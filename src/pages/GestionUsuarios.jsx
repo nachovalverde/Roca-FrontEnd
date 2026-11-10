@@ -33,7 +33,7 @@ import {
     listar as listarAccesos,
 } from '../services/registroAccesosService'
 import { paginar } from '../utils/paginar'
-import { descargarCSV } from '../utils/exportarCSV'
+import { descargarCSV, fechaDeHoy } from '../utils/exportarCSV'
 import { NOMBRE_ROL } from '../data/roles'
 
 const ESTADOS = ['Activos', 'Inactivos', 'Todos']
@@ -204,11 +204,13 @@ function GestionUsuarios() {
             await recargarDatos()
             cerrarFormulario()
 
-            await mostrarExito(
+            mostrarExito(
                 esEdicion ? 'Cuenta actualizada' : 'Cuenta creada'
             )
+            return true
         } catch (error) {
-            await mostrarError(error, 'No se pudo guardar la cuenta')
+            mostrarError(error, 'No se pudo guardar la cuenta')
+            return false
         }
     }
 
@@ -261,7 +263,7 @@ function GestionUsuarios() {
 
     function exportarRegistro() {
         descargarCSV(
-            'registro-accesos.csv',
+            `registro-de-accesos-${fechaDeHoy()}.csv`,
             COLUMNAS_REGISTRO,
             registroFiltrado
         )
@@ -387,7 +389,7 @@ function GestionUsuarios() {
                     <div className="d-flex justify-content-end mb-3">
                         <Button
                             type="button"
-                            variant="outline-success"
+                            variant="outline-primary"
                             onClick={exportarRegistro}
                             disabled={registroFiltrado.length === 0}
                         >

@@ -14,15 +14,28 @@ function Login() {
     const [error, setError] = useState('')
     const [mensaje, setMensaje] = useState('')
     const [enviando, setEnviando] = useState(false)
+    const [errores, setErrores] = useState({})
 
     async function manejarEnvio(evento) {
         evento.preventDefault()
         setError('')
         setMensaje('')
+
+        const nuevosErrores = {}
+        if (!nombreUsuario.trim()) {
+            nuevosErrores.nombreUsuario = 'Completá tu usuario o mail'
+        }
+        if (!password) {
+            nuevosErrores.password = 'Completá tu contraseña'
+        }
+
+        setErrores(nuevosErrores)
+        if (Object.keys(nuevosErrores).length > 0) return
+
         setEnviando(true)
 
         try {
-            const usuarioAutenticado = await login(nombreUsuario, password)
+            const usuarioAutenticado = await login(nombreUsuario.trim(), password)
             const destino =
                 location.state?.desde ??
                 RUTA_POR_ROL[usuarioAutenticado.rol] ??
@@ -48,7 +61,7 @@ function Login() {
                     {error && <Alert variant="danger">{error}</Alert>}
                     {mensaje && <Alert variant="success">{mensaje}</Alert>}
 
-                    <Form onSubmit={manejarEnvio}>
+                    <Form noValidate onSubmit={manejarEnvio}>
                         <Form.Group className="mb-3" controlId="nombreUsuario">
                             <Form.Label>Usuario o mail</Form.Label>
                             <Form.Control
@@ -58,8 +71,12 @@ function Login() {
                                 onChange={(evento) =>
                                     setNombreUsuario(evento.target.value)
                                 }
-                                required
+                                isInvalid={Boolean(errores.nombreUsuario)}
+                                maxLength={100}
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {errores.nombreUsuario}
+                            </Form.Control.Feedback>
                         </Form.Group>
 
                         <Form.Group className="mb-4" controlId="password">
@@ -71,8 +88,11 @@ function Login() {
                                 onChange={(evento) =>
                                     setPassword(evento.target.value)
                                 }
-                                required
+                                isInvalid={Boolean(errores.password)}
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {errores.password}
+                            </Form.Control.Feedback>
                         </Form.Group>
 
                         <div className="text-end mb-3">

@@ -87,13 +87,15 @@ function GestionNoticias() {
             await recargarNoticias()
             cerrarFormulario()
 
-            await mostrarExito(
+            mostrarExito(
                 esEdicion ? 'Noticia actualizada' : 'Noticia creada'
             )
+            return true
         } catch (error) {
-            await mostrarError(error, 'No se pudo guardar la noticia')
+            mostrarError(error, 'No se pudo guardar la noticia')
+            return false
         }
-    }
+    }   
 
     async function manejarCambioPublicacion(id, publicada) {
         try {
@@ -115,7 +117,7 @@ function GestionNoticias() {
         const confirmacion = await Alerta.fire({
             icon: 'warning',
             title: '¿Eliminar esta noticia?',
-            text: `Se eliminará “${noticia.titulo}”. Esta acción no se puede deshacer.`,
+            text: `Se eliminará «${noticia.titulo}». Esta acción no se puede deshacer.`,
             showCancelButton: true,
             confirmButtonText: 'Sí, eliminar',
             cancelButtonText: 'Cancelar',

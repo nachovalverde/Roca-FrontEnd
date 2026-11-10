@@ -9,30 +9,30 @@ export function validarNoticia(datos) {
     const imagen = String(datos.imagen ?? '').trim()
 
     if (titulo.length < 5 || titulo.length > 100) {
-        errores.titulo = 'El título debe tener entre 5 y 100 caracteres.'
+        errores.titulo = 'El título debe tener entre 5 y 100 caracteres'
     }
 
     if (!CATEGORIAS_NOTICIAS.includes(categoria)) {
-        errores.categoria = 'Elegí una categoría válida.'
+        errores.categoria = 'Elegí una categoría válida'
     }
 
     if (!descripcion) {
-        errores.descripcion = 'Completá el resumen.'
+        errores.descripcion = 'Completá el resumen'
     } else if (descripcion.length > 200) {
-        errores.descripcion = 'El resumen puede tener hasta 200 caracteres.'
+        errores.descripcion = 'El resumen puede tener hasta 200 caracteres'
     }
 
     if (!contenido) {
-        errores.contenido = 'Completá el contenido de la noticia.'
+        errores.contenido = 'Completá el contenido de la noticia'
     }
 
     if (imagen && !/^https:\/\//i.test(imagen)) {
-        errores.imagen = 'La imagen debe tener una dirección que empiece con https://.'
+        errores.imagen = 'La imagen debe tener una dirección que empiece con https://'
     } else if (imagen) {
         try {
             new URL(imagen)
         } catch {
-            errores.imagen = 'Ingresá una URL válida para la imagen.'
+            errores.imagen = 'Ingresá una URL válida para la imagen'
         }
     }
 

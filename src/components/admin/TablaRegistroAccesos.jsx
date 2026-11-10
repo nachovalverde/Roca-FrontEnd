@@ -11,7 +11,7 @@ function varianteEvento(evento) {
 
 function TablaRegistroAccesos({ registros }) {
     return (
-        <Table responsive hover className="align-middle">
+        <Table responsive hover className="align-middle position-relative">
             <caption className="visually-hidden">
                 Historial de accesos y cambios de cuentas
             </caption>

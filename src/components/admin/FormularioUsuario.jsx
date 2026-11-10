@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap'
 import CampoSelect from '../common/CampoSelect'
 import CampoTexto from '../common/CampoTexto'
@@ -22,6 +22,8 @@ function FormularioUsuario({ usuarioInicial = null, onGuardar, onCancelar }) {
     const esNuevo = usuarioInicial === null
     const [datos, setDatos] = useState(() => crearDatosIniciales(usuarioInicial))
     const [errores, setErrores] = useState({})
+    const [guardando, setGuardando] = useState(false)
+    const guardandoRef = useRef(false)
 
     function cambiarCampo(campo, valor) {
         setDatos((anterior) => ({
@@ -31,7 +33,7 @@ function FormularioUsuario({ usuarioInicial = null, onGuardar, onCancelar }) {
         }))
     }
 
-    function manejarEnvio(evento) {
+    async function manejarEnvio(evento) {
         evento.preventDefault()
 
         const erroresFormulario = validarUsuario(datos, esNuevo)
@@ -40,8 +42,21 @@ function FormularioUsuario({ usuarioInicial = null, onGuardar, onCancelar }) {
         if (Object.keys(erroresFormulario).length > 0) return
 
         const datosParaGuardar = { ...datos }
-            delete datosParaGuardar.repetirPassword
-            onGuardar(datosParaGuardar)
+        delete datosParaGuardar.repetirPassword
+
+        if (guardandoRef.current) return
+        guardandoRef.current = true
+        setGuardando(true)
+
+        let guardo = false
+        try {
+            guardo = await onGuardar(datosParaGuardar)
+        } finally {
+            if (!guardo) {
+                guardandoRef.current = false
+                setGuardando(false)
+            }
+        }
     }
 
     return (
@@ -90,6 +105,7 @@ function FormularioUsuario({ usuarioInicial = null, onGuardar, onCancelar }) {
                             label="Mail"
                             name="mail"
                             type="email"
+                            maxLength={100}
                             value={datos.mail}
                             onChange={cambiarCampo}
                             error={errores.mail}
@@ -184,8 +200,16 @@ function FormularioUsuario({ usuarioInicial = null, onGuardar, onCancelar }) {
                     >
                         Cancelar
                     </Button>
-                    <Button type="submit" variant="primary">
-                        {esNuevo ? 'Crear cuenta' : 'Guardar cambios'}
+                    <Button
+                        type="submit"
+                        variant="primary"
+                        disabled={guardando}
+                    >
+                        {guardando
+                            ? 'Guardando…'
+                            : esNuevo
+                              ? 'Crear cuenta'
+                              : 'Guardar cambios'}
                     </Button>
                 </Modal.Footer>
             </Form>
