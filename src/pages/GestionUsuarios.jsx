@@ -204,11 +204,13 @@ function GestionUsuarios() {
             await recargarDatos()
             cerrarFormulario()
 
-            await mostrarExito(
+            mostrarExito(
                 esEdicion ? 'Cuenta actualizada' : 'Cuenta creada'
             )
+            return true
         } catch (error) {
-            await mostrarError(error, 'No se pudo guardar la cuenta')
+            mostrarError(error, 'No se pudo guardar la cuenta')
+            return false
         }
     }
 

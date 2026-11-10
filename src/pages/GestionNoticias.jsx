@@ -87,13 +87,15 @@ function GestionNoticias() {
             await recargarNoticias()
             cerrarFormulario()
 
-            await mostrarExito(
+            mostrarExito(
                 esEdicion ? 'Noticia actualizada' : 'Noticia creada'
             )
+            return true
         } catch (error) {
-            await mostrarError(error, 'No se pudo guardar la noticia')
+            mostrarError(error, 'No se pudo guardar la noticia')
+            return false
         }
-    }
+    }   
 
     async function manejarCambioPublicacion(id, publicada) {
         try {
