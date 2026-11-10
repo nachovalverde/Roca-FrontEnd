@@ -6,6 +6,7 @@ import {
     EVENTOS,
     registrar,
 } from './registroAccesosService'
+import { guardarEnNavegador } from '../utils/almacenamiento'
 
 const CLAVE = 'roca_recuperacion'
 const MINUTOS_DE_VALIDEZ = 15
@@ -20,7 +21,7 @@ function leerPendientes() {
 }
 
 function guardarPendientes(pendientes) {
-    localStorage.setItem(CLAVE, JSON.stringify(pendientes))
+    guardarEnNavegador(CLAVE, JSON.stringify(pendientes))
 }
 
 export function enmascararMail(mail) {

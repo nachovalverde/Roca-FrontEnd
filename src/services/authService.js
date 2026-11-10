@@ -6,6 +6,7 @@ import {
     EVENTOS,
     registrar as registrarAcceso,
 } from './registroAccesosService'
+import { guardarEnNavegador } from '../utils/almacenamiento'
 
 const CLAVE_SESION = 'roca_sesion'
 
@@ -45,7 +46,7 @@ export async function iniciarSesion(usuarioOMail, password) {
         grado: usuario.grado,
     }
 
-    localStorage.setItem(CLAVE_SESION, JSON.stringify(sesion))
+    guardarEnNavegador(CLAVE_SESION, JSON.stringify(sesion))
 
     await registrarAcceso({
         evento: EVENTOS.INGRESO,

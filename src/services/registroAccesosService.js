@@ -1,3 +1,5 @@
+import { guardarEnNavegador } from '../utils/almacenamiento'
+
 const CLAVE = 'roca_registro_accesos'
 const MAXIMO = 500
 
@@ -39,7 +41,7 @@ export async function registrar({
     }
 
     const registrosActualizados = [entrada, ...leer()].slice(0, MAXIMO)
-    localStorage.setItem(CLAVE, JSON.stringify(registrosActualizados))
+    guardarEnNavegador(CLAVE, JSON.stringify(registrosActualizados))
 
     return entrada
 }

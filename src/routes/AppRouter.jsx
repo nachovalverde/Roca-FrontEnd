@@ -16,6 +16,7 @@ import { ROLES_INSCRIPCIONES } from '../data/roles'
 import EditarInscripcion from '../pages/EditarInscripcion'
 import RecuperarContrasena from '../pages/RecuperarContrasena'
 import GestionNoticias from '../pages/GestionNoticias'
+import LimiteDeErrores from '../components/common/LimiteDeErrores'
 
 const EstadisticasInscripciones = lazy(() =>
     import('../pages/EstadisticasInscripciones')
@@ -46,83 +47,85 @@ function AppRouter() {
     return (
         <BrowserRouter>
             <Layout>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/noticias/:id" element={<NoticiasDetalle />} />
-                    <Route path="/institucional" element={<Institucional />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/recuperar" element={<RecuperarContrasena />} />
+                <LimiteDeErrores>
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/noticias/:id" element={<NoticiasDetalle />} />
+                        <Route path="/institucional" element={<Institucional />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/recuperar" element={<RecuperarContrasena />} />
 
-                    <Route
-                        path="/admin"
-                        element={
-                            <RutaProtegida rol="vicedirectora">
-                                <PanelAdmin />
-                            </RutaProtegida>
-                        }
-                    />
-                    <Route
-                        path="/admin/noticias"
-                        element={
-                            <RutaProtegida rol="vicedirectora">
-                                <GestionNoticias />
-                            </RutaProtegida>
-                        }
-                    />
-                    <Route
-                        path="/admin/usuarios"
-                        element={
-                            <RutaProtegida rol="vicedirectora">
-                                <GestionUsuarios />
-                            </RutaProtegida>
-                        }
-                    />
-                    <Route
-                        path="/admin/estadisticas"
-                        element={
-                            <RutaProtegida rol="vicedirectora">
-                                <Suspense fallback={<Cargando />}>
-                                    <EstadisticasInscripciones />
-                                </Suspense>
-                            </RutaProtegida>
-                        }
-                    />
+                        <Route
+                            path="/admin"
+                            element={
+                                <RutaProtegida rol="vicedirectora">
+                                    <PanelAdmin />
+                                </RutaProtegida>
+                            }
+                        />
+                        <Route
+                            path="/admin/noticias"
+                            element={
+                                <RutaProtegida rol="vicedirectora">
+                                    <GestionNoticias />
+                                </RutaProtegida>
+                            }
+                        />
+                        <Route
+                            path="/admin/usuarios"
+                            element={
+                                <RutaProtegida rol="vicedirectora">
+                                    <GestionUsuarios />
+                                </RutaProtegida>
+                            }
+                        />
+                        <Route
+                            path="/admin/estadisticas"
+                            element={
+                                <RutaProtegida rol="vicedirectora">
+                                    <Suspense fallback={<Cargando />}>
+                                        <EstadisticasInscripciones />
+                                    </Suspense>
+                                </RutaProtegida>
+                            }
+                        />
 
-                    <Route
-                        path="/docente"
-                        element={
-                            <RutaProtegida rol={ROLES_INSCRIPCIONES}>
-                                <PanelDocente />
-                            </RutaProtegida>
-                        }
-                    />
-                    <Route
-                        path="/inscripciones/nueva"
-                        element={
-                            <RutaProtegida rol={ROLES_INSCRIPCIONES}>
-                                <NuevaInscripcion />
-                            </RutaProtegida>
-                        }
-                    />
-                    <Route
-                        path="/inscripciones/:id"
-                        element={
-                            <RutaProtegida rol={ROLES_INSCRIPCIONES}>
-                                <DetalleInscripcion />
-                            </RutaProtegida>
-                        }
-                    />
-                    <Route
-                        path="/inscripciones/:id/editar"
-                        element={
-                            <RutaProtegida rol={ROLES_INSCRIPCIONES}>
-                                <EditarInscripcion />
-                            </RutaProtegida>
-                        }
-                    />
+                        <Route
+                            path="/docente"
+                            element={
+                                <RutaProtegida rol={ROLES_INSCRIPCIONES}>
+                                    <PanelDocente />
+                                </RutaProtegida>
+                            }
+                        />
+                        <Route
+                            path="/inscripciones/nueva"
+                            element={
+                                <RutaProtegida rol={ROLES_INSCRIPCIONES}>
+                                    <NuevaInscripcion />
+                                </RutaProtegida>
+                            }
+                        />
+                        <Route
+                            path="/inscripciones/:id"
+                            element={
+                                <RutaProtegida rol={ROLES_INSCRIPCIONES}>
+                                    <DetalleInscripcion />
+                                </RutaProtegida>
+                            }
+                        />
+                        <Route
+                            path="/inscripciones/:id/editar"
+                            element={
+                                <RutaProtegida rol={ROLES_INSCRIPCIONES}>
+                                    <EditarInscripcion />
+                                </RutaProtegida>
+                            }
+                        />
 
-                    <Route path="*" element={<NotFound />} />
-                </Routes>
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </LimiteDeErrores>
             </Layout>
         </BrowserRouter>
     )

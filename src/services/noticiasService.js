@@ -1,4 +1,5 @@
 import noticiasIniciales from '../data/noticias'
+import { guardarEnNavegador } from '../utils/almacenamiento'
 
 const CLAVE = 'roca_noticias'
 const UN_DIA = 24 * 60 * 60 * 1000
@@ -25,12 +26,12 @@ function leerTodas() {
         },
     }))
 
-    localStorage.setItem(CLAVE, JSON.stringify(iniciales))
+    guardarEnNavegador(CLAVE, JSON.stringify(iniciales))
     return iniciales
 }
 
 function guardarTodas(noticias) {
-    localStorage.setItem(CLAVE, JSON.stringify(noticias))
+    guardarEnNavegador(CLAVE, JSON.stringify(noticias))
 }
 
 const masNuevaPrimero = (a, b) => b.fecha.localeCompare(a.fecha)

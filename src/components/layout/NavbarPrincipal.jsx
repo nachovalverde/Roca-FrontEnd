@@ -1,6 +1,6 @@
 import { Button, Container, Image, Nav, Navbar } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
-import Swal from 'sweetalert2'
+import { Alerta } from '../../utils/alertas'
 import { useAuth } from '../../context/useAuth'
 import { NOMBRE_ROL, RUTA_POR_ROL } from '../../data/roles'
 import logoEscuela from '../../assets/LogoEscuelaRoca2.jpeg'
@@ -10,7 +10,7 @@ function NavbarPrincipal() {
     const navigate = useNavigate()
 
     async function manejarCerrarSesion() {
-        const resultado = await Swal.fire({
+        const resultado = await Alerta.fire({
             title: '¿Cerrar sesión?',
             text: 'Vas a salir de tu cuenta.',
             icon: 'question',
