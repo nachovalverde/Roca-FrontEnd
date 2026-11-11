@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
 import { formatearFecha } from '../../utils/formatearFecha'
-import { nombreCompleto } from '../utils/personas'
+import { nombreCompleto } from '../../utils/personas'
 
 // Datos del padre o de la madre, según quién figure como tutor del alumno
 function datosDelTutor(inscripcion) {
