@@ -2,13 +2,15 @@ import { useRef, useState } from 'react'
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap'
 import CampoSelect from '../common/CampoSelect'
 import CampoTexto from '../common/CampoTexto'
+import { soloLetras } from '../../utils/filtros'
 import { NOMBRE_ROL } from '../../data/roles'
 import { GRADOS } from '../../data/opcionesFicha'
 import { validarUsuario } from '../../utils/validarUsuario'
 
 function crearDatosIniciales(usuarioInicial) {
     return {
-        nombre: usuarioInicial?.nombre ?? '',
+        nombres: usuarioInicial?.nombres ?? '',
+        apellido: usuarioInicial?.apellido ?? '',
         usuario: usuarioInicial?.usuario ?? '',
         mail: usuarioInicial?.mail ?? '',
         rol: usuarioInicial?.rol ?? '',
@@ -77,15 +79,31 @@ function FormularioUsuario({ usuarioInicial = null, onGuardar, onCancelar }) {
                 <Modal.Body>
                     <Row className="g-3">
                         <CampoTexto
-                            id="usuario-nombre"
-                            label="Nombre y apellido"
-                            name="nombre"
-                            value={datos.nombre}
+                            id="usuario-nombres"
+                            label="Nombres"
+                            name="nombres"
+                            value={datos.nombres}
                             onChange={cambiarCampo}
-                            error={errores.nombre}
+                            error={errores.nombres}
                             requerido
-                            md={12}
-                            autoComplete="name"
+                            md={6}
+                            autoComplete="given-name"
+                            filtro={soloLetras}
+                            maxLength={60}
+                        />
+
+                        <CampoTexto
+                            id="usuario-apellido"
+                            label="Apellido"
+                            name="apellido"
+                            value={datos.apellido}
+                            onChange={cambiarCampo}
+                            error={errores.apellido}
+                            requerido
+                            md={6}
+                            autoComplete="family-name"
+                            filtro={soloLetras}
+                            maxLength={60}
                         />
 
                         <CampoTexto

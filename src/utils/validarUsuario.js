@@ -20,14 +20,20 @@ export function validarPassword(password, repetirPassword) {
 
 export function validarUsuario(datos, esNuevo) {
     const errores = {}
-    const nombre = datos.nombre ?? ''
+    const nombres = datos.nombres ?? ''
+    const apellido = datos.apellido ?? ''
     const usuario = datos.usuario ?? ''
     const mail = datos.mail ?? ''
     const password = datos.password ?? ''
     const repetirPassword = datos.repetirPassword ?? ''
 
-    if (!nombre.trim()) {
-        errores.nombre = 'Completá este campo'
+    // Nombres y apellido: obligatorios y con al menos 2 letras cada uno
+    for (const [campo, valor] of [['nombres', nombres], ['apellido', apellido]]) {
+        if (!valor.trim()) {
+            errores[campo] = 'Completá este campo'
+        } else if (valor.trim().length < 2) {
+            errores[campo] = 'Tiene que tener al menos 2 letras'
+        }
     }
 
     if (!/^[a-z0-9._-]{4,20}$/i.test(usuario)) {
