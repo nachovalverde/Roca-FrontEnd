@@ -28,10 +28,11 @@ function EncabezadoSeccion ({ titulo, paso, onEditarPaso}) {
 function FilasDatos ({campos, datos}) {
   return (
     <dl className="row mb-0">
-      {campos.map(([campo, etiqueta])=> (
+      {/* Si la fila trae una función (como domicilioCompleto), el valor se arma con ella */}
+      {campos.map(([campo, etiqueta, armarValor]) => (
         <Fragment key={campo}>
           <dt className="col-sm-5 fw-normal text-body-secondary">{etiqueta}</dt>
-          <dd className="col-sm-7">{formatearValor(campo, datos[campo])}</dd>
+          <dd className="col-sm-7">{formatearValor(campo, armarValor ? armarValor(datos) : datos[campo])}</dd>
         </Fragment>
       ))}
     </dl>

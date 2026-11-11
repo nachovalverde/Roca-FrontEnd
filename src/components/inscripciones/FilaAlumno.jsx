@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
 import { formatearFecha } from '../../utils/formatearFecha'
+import { nombreCompleto } from '../../utils/personas'
 
 // Datos del padre o de la madre, según quién figure como tutor del alumno
 function datosDelTutor(inscripcion) {
@@ -16,13 +17,13 @@ function FilaAlumno({ inscripcion, onEliminar }) {
     <tr>
       <td>
         <Link to={`/inscripciones/${inscripcion.id}`} className="fw-semibold">
-          {alumno.apellidoNombres}
+          {nombreCompleto(alumno)}
         </Link>
       </td>
       <td className="d-none d-sm-table-cell">{alumno.dni}</td>
       <td>{alumno.grado}</td>
-      <td className="d-none d-lg-table-cell">{tutor.apellidoNombres || '—'}</td>
-      <td className="d-none d-md-table-cell">{tutor.telefonos || '—'}</td>
+      <td className="d-none d-lg-table-cell">{nombreCompleto(tutor) || '—'}</td>
+      <td className="d-none d-md-table-cell">{tutor.telefono || '—'}</td>
       <td className="d-none d-lg-table-cell">{formatearFecha(inscripcion.creadaEl)}</td>
       <td>
         {/* En el celular los botones pasan uno debajo del otro, así la tabla entra sin deslizarse */}
@@ -31,13 +32,13 @@ function FilaAlumno({ inscripcion, onEliminar }) {
             as={Link}
             to={`/inscripciones/${inscripcion.id}/editar`}
             variant="outline-primary"
-            aria-label={`Editar la inscripción de ${alumno.apellidoNombres}`}
+            aria-label={`Editar la inscripción de ${nombreCompleto(alumno)}`}
           >
             Editar
           </Button>
           <Button
             variant="outline-danger"
-            aria-label={`Eliminar la inscripción de ${alumno.apellidoNombres}`}
+            aria-label={`Eliminar la inscripción de ${nombreCompleto(alumno)}`}
             onClick={() => onEliminar(inscripcion)}
           >
             Eliminar

@@ -1,13 +1,18 @@
+import { documentoCompleto, domicilioCompleto, nombreCompleto, telefonosDe } from '../utils/personas'
+
+// Cada fila es [campo, etiqueta] o [clave, etiqueta, función que arma el valor].
+// Los datos se guardan separados, pero en el resumen y en la ficha impresa se muestran
+// juntos en una fila, como en la ficha en papel.
 const CAMPOS_TUTOR = [
-  ['apellidoNombres', 'Apellido y nombres'],
-  ['dni', 'CUIL o DNI'],
+  ['nombre', 'Apellido y nombres', nombreCompleto],
+  ['documento', 'Documento', documentoCompleto],
   ['ocupacion', 'Ocupación'],
   ['caracter', 'Carácter'],
   ['nivelEstudio', 'Estudios cursados'],
   ['estadoEstudio', 'Completo o incompleto'],
-  ['telefonos', 'Teléfonos'],
+  ['telefonos', 'Teléfonos', telefonosDe],
   ['mail', 'Mail'],
-  ['domicilio', 'Domicilio'],
+  ['domicilio', 'Domicilio', domicilioCompleto],
   ['planSocial', 'Cobra AUH u otro plan social'],
 ]
 
@@ -17,14 +22,14 @@ export const SECCIONES_RESUMEN = [
     titulo: 'Datos del alumno',
     paso: 0,
     campos: [
-      ['apellidoNombres', 'Apellido y nombres'],
-      ['dni', 'CUIL o DNI'],
+      ['nombre', 'Apellido y nombres', nombreCompleto],
+      ['documento', 'Documento', documentoCompleto],
       ['sexo', 'Sexo según DNI'],
       ['fechaNacimiento', 'Fecha de nacimiento'],
       ['actaNacimiento', 'N.º de acta de nacimiento'],
       ['provinciaNacimiento', 'Provincia de nacimiento'],
       ['lugarNacimiento', 'Localidad de nacimiento'],
-      ['domicilio', 'Domicilio'],
+      ['domicilio', 'Domicilio', domicilioCompleto],
       ['cicloLectivo', 'Ciclo lectivo'],
       ['grado', 'Grado en el que se inscribe'],
       ['repitente', 'Repitente'],
@@ -33,7 +38,7 @@ export const SECCIONES_RESUMEN = [
       ['tutor', 'Tutor del niño'],
     ],
   },
-  { clave: 'padre', titulo: 'Datos del padre', paso: 1, campos: CAMPOS_TUTOR},
+  { clave: 'padre', titulo: 'Datos del padre', paso: 1, campos: CAMPOS_TUTOR },
   { clave: 'madre', titulo: 'Datos de la madre', paso: 2, campos: CAMPOS_TUTOR },
   {
     clave: 'vivienda',
@@ -49,9 +54,9 @@ export const SECCIONES_RESUMEN = [
 ]
 
 export const CAMPOS_CONTACTO = [
-  ['apellidoNombres', 'Apellido y nombres'],
+  ['nombre', 'Apellido y nombres', nombreCompleto],
   ['parentesco', 'Parentesco'],
-  ['telefonos', 'Teléfonos'],
+  ['telefonos', 'Teléfonos', telefonosDe],
 ]
 
 export const PASO_CONTACTOS = 4

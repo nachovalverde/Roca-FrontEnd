@@ -6,6 +6,7 @@ import FormularioInscripcion from '../components/inscripciones/FormularioInscrip
 import * as inscripcionesService from '../services/inscripcionesService'
 import { useAuth } from '../context/useAuth'
 import { mostrarError } from '../utils/alertas'
+import { nombreCompleto } from '../utils/personas'
 
 function EditarInscripcion() {
   const { id } = useParams()
@@ -65,7 +66,7 @@ function EditarInscripcion() {
 
   return (
     <Container className="py-4">
-      <title>{`Editar ${inscripcion.alumno.apellidoNombres} · Escuela Roca`}</title>
+      <title>{`${nombreCompleto(inscripcion.alumno)} · Inscripción · Escuela Roca`}</title>
       <meta name="robots" content="noindex" />
 
       <Link to={`/inscripciones/${id}`} className="d-inline-block mb-3">

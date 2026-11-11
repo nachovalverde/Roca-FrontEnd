@@ -2,6 +2,7 @@ import { Row } from 'react-bootstrap'
 import CampoSelect from '../common/CampoSelect'
 import CampoTexto from '../common/CampoTexto'
 
+
 function FiltrosRegistro({ usuarios, filtros, onCambiar }) {
     const nombresUsuarios = [
         ...new Set(usuarios.map((usuario) => usuario.usuario).filter(Boolean)),

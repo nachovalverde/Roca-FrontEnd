@@ -12,6 +12,7 @@ import { paginar } from '../utils/paginar'
 import { descargarCSV, fechaDeHoy } from '../utils/exportarCSV'
 import { COLUMNAS_INSCRIPCIONES } from '../data/columnasExportacion'
 import { Alerta, mostrarError, mostrarExito } from '../utils/alertas'
+import { nombreCompleto } from '../utils/personas'
 
 // El encabezado muestra siempre el total; lo filtrado se cuenta abajo de la tabla
 function textoCantidad(total) {
@@ -53,15 +54,15 @@ function PanelDocente() {
   }
 
   // Lo que muestra la tabla se calcula en cada render: no es estado
-  const textoBuscado = normalizarTexto(filtros.busqueda)
+  // Cada palabra buscada tiene que aparecer en el apellido, los nombres o el DNI, en cualquier orden:
+  // «ana ruiz», «ruiz ana» y «ruiz» encuentran a «Ruiz, Ana Sofía»
+  const palabrasBuscadas = normalizarTexto(filtros.busqueda).split(' ').filter(Boolean)
   const inscripcionesVisibles = inscripciones
     .filter(({ alumno }) => {
-      const coincideCiclo = !filtros.ciclo || alumno.cicloLectivo ===filtros.ciclo
+      const coincideCiclo = !filtros.ciclo || alumno.cicloLectivo === filtros.ciclo
       const coincideGrado = !filtros.grado || alumno.grado === filtros.grado
-      const coincideTexto =
-        !textoBuscado ||
-        normalizarTexto(alumno.apellidoNombres).includes(textoBuscado) ||
-        alumno.dni.includes(textoBuscado)
+      const textoAlumno = normalizarTexto(`${alumno.apellido} ${alumno.nombres} ${alumno.dni}`)
+      const coincideTexto = palabrasBuscadas.every((palabra) => textoAlumno.includes(palabra))
       return coincideCiclo && coincideGrado && coincideTexto
     })
     .sort((a, b) => b.creadaEl.localeCompare(a.creadaEl))
@@ -71,7 +72,7 @@ function PanelDocente() {
     const eliminarInscripcion = async (inscripcion) => {
     const { isConfirmed } = await Alerta.fire({
       title: '¿Eliminar la inscripción?',
-      text: `Se va a borrar la inscripción de ${inscripcion.alumno.apellidoNombres}. No se puede deshacer.`,
+      text: `Se va a borrar la inscripción de ${nombreCompleto(inscripcion.alumno)}. No se puede deshacer.`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar',
