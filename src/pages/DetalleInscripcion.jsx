@@ -7,6 +7,7 @@ import * as inscripcionesService from '../services/inscripcionesService'
 import { formatearFecha } from '../utils/formatearFecha'
 import FichaImprimible from '../components/inscripciones/FichaImprimible'
 import { ESTILO_FICHA_IMPRESA } from '../components/inscripciones/estiloFichaImpresa'
+import { nombreCompleto } from '../utils/personas'
 
 
 function DetalleInscripcion() {
@@ -23,7 +24,7 @@ function DetalleInscripcion() {
     contentRef: fichaRef,
     // Es el nombre que propone el navegador al guardar el PDF
     documentTitle: inscripcion
-      ? `Ficha ${inscripcion.alumno.apellidoNombres} ${inscripcion.alumno.cicloLectivo ?? ''}`.trim()
+      ? `Ficha ${nombreCompleto(inscripcion.alumno)} ${inscripcion.alumno.cicloLectivo ?? ''}`.trim()
       : 'Ficha de inscripción',
     pageStyle: ESTILO_FICHA_IMPRESA,
   })
@@ -69,7 +70,7 @@ function DetalleInscripcion() {
 
   return (
     <Container className="py-4">
-      <title>{`${alumno.apellidoNombres} - Inscripcion - Escuela Roca`}</title>
+      <title>{`${nombreCompleto(alumno)} - Inscripcion - Escuela Roca`}</title>
       <meta name="robots" content="noindex" />
 
 
@@ -81,7 +82,7 @@ function DetalleInscripcion() {
 
       <div className="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
         <div>
-          <h1 className="h2 mb-1">{alumno.apellidoNombres}</h1>
+          <h1 className="h2 mb-1">{nombreCompleto(alumno)}</h1>
           <p className="text-body-secondary mb-0">
             {alumno.grado} · Ciclo {alumno.cicloLectivo || '--'} · DNI {alumno.dni} 
           </p>
